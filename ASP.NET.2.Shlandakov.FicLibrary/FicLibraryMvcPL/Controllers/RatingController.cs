@@ -19,7 +19,6 @@ namespace FicLibraryMvcPL.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Rate(int value, int titleId, int userId)
         {
             try

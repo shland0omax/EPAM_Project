@@ -15,11 +15,13 @@ namespace FicLibraryMvcPL.Controllers
     {
         private ICommentService commentService;
         private ICommentRelationService crService;
+        private IUserService userService;
 
-        public CommentController(ICommentRelationService commentRelationService, ICommentService commentService)
+        public CommentController(ICommentRelationService commentRelationService, ICommentService commentService, IUserService userService)
         {
             this.commentService = commentService;
             crService = commentRelationService;
+            this.userService = userService;
         }
 
         [HttpGet]
@@ -45,10 +47,10 @@ namespace FicLibraryMvcPL.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int id, IUserService service)
+        public ActionResult Edit(int id)
         {
             var model = Mapper.ToView(commentService.GetEntityById(id));
-            if (ModelHelper.HaveAccessPrivilege(service.GetEntityById(model.CommentatorId).Login, User.Identity.Name))
+            if (!ModelHelper.HaveAccessPrivilege(userService.GetEntityById(model.CommentatorId).Login, User.Identity.Name))
                 return RedirectToAction("AccessViolation", "Error");
             return PartialView(model);
         }

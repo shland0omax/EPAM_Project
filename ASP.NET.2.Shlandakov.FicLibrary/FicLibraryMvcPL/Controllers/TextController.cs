@@ -53,7 +53,7 @@ namespace FicLibraryMvcPL.Controllers
         {
             var text = Mapper.ToView(textService.GetEntityById(id));
             var title = tdService.GetEntityById(text.TitleId);
-            if (ModelHelper.HaveAccessPrivilege(userService.GetEntityById(title.AuthorId).Login, User.Identity.Name))
+            if (!ModelHelper.HaveAccessPrivilege(userService.GetEntityById(title.AuthorId).Login, User.Identity.Name))
                 return RedirectToAction("AccessViolation", "Error");
             ViewBag.TextDescId = title.Id;
             return View(text);
@@ -77,7 +77,7 @@ namespace FicLibraryMvcPL.Controllers
             var entityToDelete = textService.GetEntityById(id);
             if (entityToDelete == null) return RedirectToAction("BadRequest", "Error");
             var title = tdService.GetEntityById(entityToDelete.TitleId);
-            if (ModelHelper.HaveAccessPrivilege(userService.GetEntityById(title.AuthorId).Login, User.Identity.Name))
+            if (!ModelHelper.HaveAccessPrivilege(userService.GetEntityById(title.AuthorId).Login, User.Identity.Name))
                 return RedirectToAction("AccessViolation", "Error");
             textService.DeleteEntity(entityToDelete);
             return RedirectToAction("Index", "TextDescription", new {id = title.Id});

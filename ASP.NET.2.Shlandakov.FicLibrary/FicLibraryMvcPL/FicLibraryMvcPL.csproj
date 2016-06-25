@@ -162,10 +162,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\FicLibraryDB.mdf" />
-    <Content Include="App_Data\FicLibraryDB_log.ldf">
-      <DependentUpon>FicLibraryDB.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\metro-icons.css" />
     <Content Include="Content\metro-icons.min.css" />
     <Content Include="Content\metro-responsive.css" />
@@ -284,6 +280,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>

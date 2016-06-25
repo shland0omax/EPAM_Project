@@ -19,11 +19,15 @@ namespace FicLibraryMvcPL
                 defaults: new { controller = "User", action = "Index" }
             );
 
+            routes.MapRoute("avatar", "user/uploadavatar", new {controller = "User", action = "AvatarUpload"},
+                new {httpMethod = new HttpMethodConstraint("POST")});
+
             routes.MapRoute(
                 name: "UserActions",
                 url: "user/{profileId}/{action}",
                 defaults: new { controller = "User", action = "Edit" }
             );
+
             routes.MapRoute(
                 name: "Text",
                 url: "text/{id}/{action}",

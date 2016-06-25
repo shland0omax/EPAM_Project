@@ -20,7 +20,7 @@ namespace FicLibraryMvcPL.Controllers
         }
         public ActionResult Index()
         {
-            var publications = tdService.GetLastTextDescriptionEntitiesWithSkip(10, 0).Select(Mapper.ToView);
+            var publications = tdService.GetLastTextDescriptionEntitiesWithSkip(5, 0).Select(Mapper.ToView);
             publications = ModelHelper.ReadTextDescriptionsAdditionInfo(publications);
             return View(publications);
         }

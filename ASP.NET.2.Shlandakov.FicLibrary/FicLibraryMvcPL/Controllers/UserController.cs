@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BLL.Entities;
 using BLL.Interfaces;
 using FicLibraryMvcPL.Infrastructure;
 using FicLibraryMvcPL.Mappers;
@@ -38,49 +39,62 @@ namespace FicLibraryMvcPL.Controllers
         {
             var model = new UserPageViewModel();
             if (id == null)
-                return RedirectToAction("Index", "Error"); //redirect to error page
-            var profileEntity = profileService.GetEntityById((int)id);
-            if (profileEntity != null)
+                return RedirectToAction("Index", "Error");
+            ProfileEntity profileEntity;
+            try
             {
-                model.Profile = Mapper.ToView(profileEntity);
-                model.User = Mapper.ToView(userService.GetUserByProfileId(model.Profile.Id));
-                model.Stats = ModelHelper.ReadUserStats(model.User.Id, true);
-                var lastPublications = tdService.GetLastUserTextDescriptionEntitiesWithSkip(model.User.Id, 5, 0).Select(Mapper.ToView).ToList();
-                for (int i = 0; i < lastPublications.Count; i++)
-                {
-                    lastPublications[i].Author = model.User;
-                    lastPublications[i].AuthorProfile = model.Profile;
-                    lastPublications[i].Rating = ratingService.GetAverageRatingForTitle(lastPublications[i].Id);
-                }
-                model.Titles = lastPublications;
-                var relationId = commentRelationService.GetCommentRelationIdByName("User");
-                var lastComments =
-                    commentService.GetLastCommentsAboutObjectWithSkip(relationId, model.User.Id, 5, 0).Select(Mapper.ToView).ToList();
-                for (var i = 0; i < lastComments.Count; i++)
-                {
-                    lastComments[i].Sender = Mapper.ToView(userService.GetEntityById(lastComments[i].CommentatorId));
-                    lastComments[i].SenderProfile = Mapper.ToView(profileService.GetEntityById(lastComments[i].Sender.ProfileId));
-                    lastComments[i].ShortStats = ModelHelper.ReadUserStats(lastComments[i].Sender.Id, false);
-                }
-                model.Comments = lastComments;
-                return View(model);
+                profileEntity = profileService.GetEntityById((int) id);
             }
-            return RedirectToAction("Index", "Error"); //redirect to error page
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Index", "Error");
+            }
+            catch
+            {
+                return RedirectToAction("Index", "Error");
+            }
+            model.Profile = Mapper.ToView(profileEntity);
+            model.User = Mapper.ToView(userService.GetUserByProfileId(model.Profile.Id));
+            model.Stats = ModelHelper.ReadUserStats(model.User.Id, true);
+            var lastPublications = tdService.GetLastUserTextDescriptionEntitiesWithSkip(model.User.Id, 3, 0).Select(Mapper.ToView).ToList();
+            for (int i = 0; i < lastPublications.Count; i++)
+            {
+                lastPublications[i].Author = model.User;
+                lastPublications[i].AuthorProfile = model.Profile;
+                lastPublications[i].Rating = ratingService.GetAverageRatingForTitle(lastPublications[i].Id);
+            }
+            model.Titles = lastPublications;
+            var relationId = commentRelationService.GetCommentRelationIdByName("User");
+            var lastComments =
+                commentService.GetLastCommentsAboutObjectWithSkip(relationId, model.User.Id, 5, 0).Select(Mapper.ToView).ToList();
+            for (var i = 0; i < lastComments.Count; i++)
+            {
+                lastComments[i].Sender = Mapper.ToView(userService.GetEntityById(lastComments[i].CommentatorId));
+                lastComments[i].SenderProfile = Mapper.ToView(profileService.GetEntityById(lastComments[i].Sender.ProfileId));
+                lastComments[i].ShortStats = ModelHelper.ReadUserStats(lastComments[i].Sender.Id, false);
+            }
+            model.Comments = lastComments;
+            return View(model);
         }
 
         [HttpPost]
         [Authorize]
+        [ValidateAntiForgeryToken]
         public ActionResult AvatarUpload(HttpPostedFileBase file)
         {
             byte[] fileData;
-            using (var binaryReader = new BinaryReader(file.InputStream))
+            if (file != null)
             {
-                fileData = binaryReader.ReadBytes(file.ContentLength);
+                using (var binaryReader = new BinaryReader(file.InputStream))
+                {
+                    fileData = binaryReader.ReadBytes(file.ContentLength);
+                }
             }
+            else fileData = null;
             var profile = profileService.GetProfileByUserLogin(User.Identity.Name);
             profile.Avatar = fileData;
             profileService.UpdateEntity(profile);
-            return RedirectToAction("Index", new { profileId = Profile["Id"] });
+            return RedirectToAction("Index", new { id = profile.Id });
         }
 
         [HttpGet]

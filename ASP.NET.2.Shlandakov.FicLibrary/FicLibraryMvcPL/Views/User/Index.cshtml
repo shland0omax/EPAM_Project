@@ -21,7 +21,18 @@
     };
 }
 
-
+<div data-role="dialog" id="dialog" data-close-button="true" class="padding20 dialog">
+    <h1>Новый аватар</h1>
+    @using (@Html.BeginForm("AvatarUpload", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="input-control file" data-role="input" style="width: 200px">
+            <input type="file" name="file" accept="image/jpeg" id="file">
+            <button class="button"><span class="mif-folder"></span></button>
+        </div>
+        <input type="submit" value="Загрузить" class="button success block-shadow-success" />
+    }
+</div>
 
 <div class="grid">
     <div class="row cells5">
@@ -242,17 +253,6 @@ else
 
 <div id="add-comment"></div>
 
-<div data-role="dialog" id="dialog" data-close-button="true" class="padding20 dialog">
-    <h1>Новый аватар</h1>
-    @using (@Html.BeginForm("AvatarUpload", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <div class="input-control file" data-role="input" style="width: 200px">
-            <input type="file" name="file" accept="image/jpeg" id="file">
-            <button class="button"><span class="mif-folder"></span></button>
-        </div>
-        <button class="button success block-shadow-success">Загрузить</button>
-    }
-</div>
 
 <script>
     $(window).load(function() {

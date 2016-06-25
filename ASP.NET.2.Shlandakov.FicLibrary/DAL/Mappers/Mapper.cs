@@ -105,7 +105,7 @@ namespace DAL.Mappers
 
         public static DalRating ToDal(Rating rating)
         {
-            return new DalRating()
+            return new DalRating
             {
                 Id = rating.Id,
                 TextDescId = rating.TextDescId,

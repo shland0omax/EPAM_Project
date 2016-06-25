@@ -1,5 +1,5 @@
 ﻿
-function RenewPage() {
+function RenewPage(response) {
     if (response.Success) {
         window.location.reload();
     }
