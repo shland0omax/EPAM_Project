@@ -1,0 +1,55 @@
+﻿<ul class="app-bar-menu">
+    @*<li><a href="@Url.Action("Flow", "Home")" class="bg-hover-crimson"><span class="mif-earth icon" style="margin: 0 5pt"></span>Поток</a></li>
+    <li class="bg-hover-crimson">
+        <a href="" class="bg-hover-crimson dropdown-toggle"><span class="mif-section icon" style="margin: 0 5pt"></span>Лучшее</a>
+        <ul class="d-menu  bg-darkCrimson bd-darkCrimson" data-role="dropdown">
+            <li><a href="" style="color: white" class="bg-hover-crimson">За неделю</a></li>
+            <li><a href="" style="color: white" class="bg-hover-crimson">За месяц</a></li>
+            <li><a href="" style="color: white" class="bg-hover-crimson">За все время</a></li>
+        </ul>
+    </li>*@
+    @if (User.Identity.IsAuthenticated)
+    {
+        <li><a href="@Url.Action("Search", "Home")" class="bg-hover-crimson"><span class="mif-checkmark icon" style="margin: 0 5pt"></span>Расширенный поиск</a></li>
+    }
+</ul>
+@if (User.Identity.IsAuthenticated)
+{
+    <ul class="app-bar-menu place-right">
+        <li class="bg-darkCrimson">
+            @using (Html.BeginForm("Search", "Home", FormMethod.Get))
+            {
+                <div class="input-control text ">
+                    <input type="text" name="searchString" id="searchString" placeholder="Поиск..."/>
+                </div>
+                <input type="submit" style="display: none">
+            }
+        </li>
+        <li class="bg-darkCrimson">
+            <a class="dropdown-toggle bg-hover-crimson">@User.Identity.Name</a>
+            <ul class="d-menu bg-darkCrimson bd-darkCrimson place-right" data-role="dropdown">
+                <li><a href="@Url.Action("Index", "User", new {id = Profile["Id"]})" class="bg-hover-crimson" style="color: white"><span class="mif-profile icon" style="color: white"></span>Профиль</a></li>
+                <li><a href="@Url.Action("Published", "User", new {profileId = Profile["Id"]})" class="bg-hover-crimson" style="color: white"><span class="mif-stack icon" style="color: white"></span>Публикации</a></li>
+                <li><a href="@Url.Action("Unpublished", "User", new {profileId = Profile["Id"]})" class="bg-hover-crimson" style="color: white"><span class="mif-pilcrow icon" style="color: white"></span>Черновики</a></li>
+                <li class="divider"></li>
+                @if (!User.IsInRole("Banned"))
+                {
+                    <li><a href="@Url.Action("Create", "TextDescription")" class="bg-hover-crimson" style="color: white"><span class="mif-pencil icon" style="color: white"></span>Создать публикацию</a></li>
+                    <li class="divider"></li>
+                }
+                <li><a href="@Url.Action("Logoff", "Account")" class="bg-hover-crimson" style="color: white"><span class="mif-exit icon" style="color: white"></span>Выйти</a></li>
+            </ul>
+        </li>
+    </ul>
+}
+else
+{
+    <ul class="app-bar-menu place-right">
+        <li class="bg-hover-crimson">
+            <a href="@Url.Action("Register", "Account")" class="bg-hover-crimson"><span class="mif-user-plus icon" style="margin: 0 5pt"></span>Регистрация</a>
+        </li>
+        <li class="bg-hover-crimson">
+            <a href="@Url.Action("Login", "Account")" class="bg-hover-crimson"><span class="mif-enter icon" style="margin: 0 5pt"></span>Войти</a>
+        </li>
+    </ul>
+}

@@ -1,0 +1,59 @@
+﻿@model FicLibraryMvcPL.Models.TextViewModel
+@{
+    ViewBag.Title = ViewBag.TitleName + " - " + Model.Subtitle;
+    var commentOptions = new AjaxOptions()
+    {
+        HttpMethod = "GET",
+        OnSuccess = "HideCreateButton",
+        UpdateTargetId = "add-comment",
+        LoadingElementId = "commentpreloader"
+    };
+}
+
+<div class="partial-border">
+    <h2 class="align-center">@ViewBag.TitleName</h2>
+
+    <h3 class="align-justify">@Model.Subtitle</h3>
+
+    <pre class="full-size align-justify margin10" style="font-family: 'Source Sans Pro'; white-space: pre-wrap;">
+    @Model.Content
+    </pre>
+    <div class="align-center">
+        @Html.ActionLink("К оглавлению", "Index", "TextDescription", new {id = Model.TitleId}, new {@class = "button success"})
+        @*@Html.ActionLink("Back to List", "Index")*@
+    </div>
+</div>
+
+@if (ViewBag.IsPublished && Model.Comments != null)
+{
+    <h3 align="center">Коментарии</h3>
+    if (Model.Comments.ToList().Count == 0)
+     {
+         <div class="partial-border align-center">
+             <h1>
+                 <small>Похоже, никто не высказал свои впечатления о @Model.Subtitle...</small>
+             </h1>
+             @if (User.Identity.IsAuthenticated && !User.IsInRole("Banned"))
+             {
+                 @Ajax.ActionLink("Оставьте свое мнение!", "Create", "Comment", new {relation = "Text", objectId = Model.Id, userId = Profile["Id"]}, commentOptions, new {@class = "button success block-shadow-success", id = "show-comment-form"})
+                 <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+             }
+         </div>
+     }
+     else
+     {
+         foreach (var e in Model.Comments)
+         {
+             @Html.Partial("_CommentPartial", e)
+         }
+         if (User.Identity.IsAuthenticated)
+         {
+             <div class="align-center">
+                 @Ajax.ActionLink("Оставьте свое мнение!", "Create", "Comment", new {relation = "Text", objectId = Model.Id, userId = Profile["Id"]}, commentOptions, new {@class = "button success block-shadow-success", id = "show-comment-form"})
+                 <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+             </div>
+         }
+     }
+}
+
+<div id="add-comment"></div>

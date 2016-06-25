@@ -1,0 +1,48 @@
+﻿@model FicLibraryMvcPL.Models.AuthModels.LogOnViewModel
+@{
+    ViewBag.Title = "Вход";
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "logon-parent",
+        HttpMethod = "POST",
+        LoadingElementId ="preloader"
+    };
+}
+<div class="login-form padding20">
+    <h1 class="text-light" align="center">Авторизация</h1>
+    <hr class="thin" /><br>
+
+    @using (Ajax.BeginForm("Login", "Account", ajaxOptions, new { data_role = "validator" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <div class="input-control text full-size" data-role="validator input" style="margin: 10pt 0">
+                @Html.LabelFor(model => model.UserName)
+                @Html.EditorFor(model => model.UserName)
+            </div>
+
+            <div class="input-control password full-size" data-role="validator input" style="margin: 10pt 0">
+                @Html.LabelFor(model => model.Password)
+                @Html.EditorFor(model => model.Password)
+            </div>
+
+            <div class="form-horizontal">
+                <label class="input-control checkbox margin10">
+                    <input type="checkbox" checked data-val="true" data-val-required="Требуется поле Remember." id="RememberMe" name="RememberMe" value="true">
+                    <span class="check"></span>
+                    <span class="caption">Запомнить</span>
+                </label>
+            </div>
+
+            <div id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+            @Html.ValidationSummary(true, "", new { @class = "text-light red" })
+
+            <div class="form-horizontal" style="margin: 10pt 0 " align="center">
+                <button type="submit" class="button success">Войти</button>
+                @Html.ActionLink("Регистрация", "Register", new { }, new { @class = "button primary" })
+            </div>
+        </div>
+    }
+</div>

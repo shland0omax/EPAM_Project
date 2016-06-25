@@ -1,0 +1,59 @@
+﻿@using System.Globalization
+@model FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel
+
+
+<div class="partial-border grid">
+    <div class="row cells6">
+        <div class="cell colspan5">
+            <a class="text">
+                <h2 style="margin: 0">@Model.Title</h2>
+            </a>
+        </div>
+        <div class="cell">
+            @if (Model.IsPublished)
+            {
+                <div class="rating place-right" data-role="rating" data-static="@(User.Identity.IsAuthenticated && !User.IsInRole("Banned") ? "false": "true")" title-id="@Model.Id"  data-value="@Model.Rating.ToString(CultureInfo.InvariantCulture)" data-score-title="Оценка: " data-color-rate="true" data-on-rate="ratingRequest"></div>
+            }
+        </div>
+    </div>
+    <div class="row cells3">
+        <div class="cell">
+            <div class="row">
+                <h5 style="margin: 0">Автор:</h5>
+            </div>
+            <div class="row cells6">
+                <div class="cell">
+                    @if (Model.AuthorProfile.Avatar == null)
+                    {
+                        <img src="/Resources/no_avatar.png" style="width: 30px" alt="user empty avatar">
+                    }
+                    else
+                    {
+                        <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.AuthorProfile.Avatar))" style="max-width: 40px; max-height: 40px" alt="user avatar"/>
+                    }
+                </div>
+                <div class="cell colspan5">
+                    <a style="color: black" href="@Url.Action("Index", "User", new {id = Model.Author.ProfileId})"><h5>@Model.Author.Login</h5></a>
+                </div>
+            </div>
+        </div>
+        <div class="cell">
+            <h4><small>Начало работы: @Model.CreationDate</small></h4>
+            <h4><small>Опубликовано: @(Model.PublicationDate != null && Model.IsPublished ? Model.PublicationDate.Value.Date.ToShortDateString() : "Не опубликовано")</small></h4>
+        </div>
+        <div class="cell">
+            <div class="row">
+                @if (Model.LastEditDate != null)
+                {
+                    <h4><small>Последнее обновление: @Model.LastEditDate</small></h4>
+                }
+            </div>
+            @if (ViewBag.ShowMoreButton)
+            {
+                <div class="row">
+                    @Html.ActionLink("Подробнее", "Index", "TextDescription", new {id = Model.Id}, new {@class = "button info place-right"})
+                </div>
+            }
+        </div>
+    </div>
+</div>

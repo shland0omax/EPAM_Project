@@ -1,0 +1,263 @@
+﻿@using FicLibraryMvcPL.Infrastructure
+@using FicLibraryMvcPL.Models
+@model FicLibraryMvcPL.Models.UserPageViewModel
+@{
+    ViewBag.Title = Model.User.Login + " - страница пользователя";
+    var isYourPage = User.Identity.IsAuthenticated && User.Identity.Name == Model.User.Login && !User.IsInRole("Banned");
+    var hasModeratorOptions = User.Identity.IsAuthenticated && User.IsInRole("Owner") || User.IsInRole("Admin") || User.IsInRole("Moderator");
+    ViewBag.ShowMoreButton = true;
+    var commentOptions = new AjaxOptions()
+    {
+        HttpMethod = "GET",
+        OnSuccess = "HideCreateButton",
+        UpdateTargetId = "add-comment",
+        LoadingElementId = "preloader"
+    };
+    var adminOptions = new AjaxOptions
+    {
+        HttpMethod = "Post",
+        OnSuccess = "RenewPage",
+        UpdateTargetId = "error"
+    };
+}
+
+
+
+<div class="grid">
+    <div class="row cells5">
+        <div class="cell">
+            <div class="image-container bordered">
+                <div class="frame">
+                    @if (Model.Profile.Avatar == null)
+                    {
+                        <img src="/Resources/no_avatar.png" alt="user empty avatar">
+                    }
+                    else
+                    {
+                        <img src="@String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(Model.Profile.Avatar))" style="width: 250px" alt="user avatar"/>
+                    }
+                </div>
+                <div class="image-overlay">
+                    <h4>@Model.User.Login</h4>
+                </div>
+            </div>
+
+            <div class="align-center">
+                @if (isYourPage)
+                {
+                    <button class="button rounded info" onclick="showMetroDialog('#dialog')">Загрузить</button>
+                }
+                @if (isYourPage || (hasModeratorOptions && ModelHelper.HaveAccessPrivilege(Model.User.Login, User.Identity.Name)))
+                {
+                    <a href="~/user/@(Model.Profile.Id)/edit" class="button rounded info"><span class="icon mif-pencil white"></span></a>
+                }
+            </div>
+
+        </div>
+        <div class="cell colspan4">
+            <div class="accordion large-heading" data-role="accordion">
+                <div class="frame active">
+                    <div class="heading">Профиль пользователя @Model.User.Login
+                    </div>
+                    <div class="content">
+                        <div class="grid margin0">
+                            <div class="row cells2">
+                                <div class="cell">
+                                    <div class="panel">
+                                        <div class="heading">
+                                            <span class="icon mif-user"></span>
+                                            <span class="title">Профильные данные</span>
+                                        </div>
+                                        <div class="content">
+                                            <div class="row cells2">
+                                                <div class="cell">
+                                                    <p class="margin0 place-right">Имя:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                    <p class="margin0 place-right">Фамилия:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                    <p class="margin0 place-right">Дата рождения:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                    <p class="margin0 place-right">Пол:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                    <p class="margin0 place-right">E-mail:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                    <p class="margin0 place-right">Телефон:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                </div>
+                                                <div class="cell">
+                                                    @(Model.Profile.FirstName ?? "Не указано")<br>
+                                                    <hr class="bg-darkerGray">
+                                                    @(Model.Profile.LastName ?? "Не указана")<br>
+                                                    <hr class="bg-darkerGray">
+                                                    @(Model.Profile.DayOfBirth?.ToShortDateString() ?? "Не указана")<br>
+                                                    <hr class="bg-darkerGray">
+                                                    @(Model.Profile.Sex == null ? "Не указан" : (bool) Model.Profile.Sex ? "Мужской" : "Женский")
+                                                    <hr class="bg-darkerGray">
+                                                    @(Model.User.Email ?? "Не указан")<br>
+                                                    <hr class="bg-darkerGray">
+                                                    @(Model.Profile.Mobile ?? "Не указан")<br>
+                                                    <hr class="bg-darkerGray">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="panel danger">
+                                        <div class="heading">
+                                            <span class="icon mif-user bg-darkRed"></span>
+                                            <span class="title"></span>
+                                        </div>
+                                        <div class="content">
+                                            <div class="row cells2">
+                                                <div class="cell">
+                                                    <p class="margin0 place-right">Статус:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                </div>
+                                                <div class="cell">
+                                                    @(Enum.GetName(typeof (Role), Model.User.RoleId))<br>
+                                                    <hr class="bg-darkerGray">
+                                                </div>
+                                            </div>
+                                            <div id="role-block">
+                                                @using (Ajax.BeginForm("ChangeUserRole", "Admin", adminOptions))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" id="userId" name="userId" value="@Model.User.Id">
+                                                    <input type="hidden" id="editorLogin" name="editorLogin" value="@User.Identity.Name">
+                                                    <div class="row cells2">
+                                                        <div class="cell">
+                                                            <p class="margin0 place-right">Изменение статуса:</p><br>
+                                                            <hr class="bg-darkerGray">
+                                                        </div>
+                                                        <div class="cell">
+                                                            <div class="input-control select full-size">
+                                                                @Html.RoleEnum(Model.User.Login, User.Identity.Name)
+                                                            </div>
+                                                        </div>
+                                                        <div class="place-right">
+                                                            <input type="submit" value="Изменить" class="button">
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="cell">
+                                    <div class="panel warning" style="margin-bottom: 10px">
+                                        <div class="heading">
+                                            <span class="icon mif-info bg-darkOrange"></span>
+                                            <span class="title">О себе</span>
+                                        </div>
+                                        <div class="content">
+                                            <h5 class="text align-justify" style="margin: 0 20px 0">@(Model.Profile.About ?? "Похоже, " + @Model.User.Login + " весьма скрытен..., а может просто скромен!")</h5>
+                                        </div>
+                                    </div>
+                                    <div class="panel success">
+                                        <div class="heading">
+                                            <span class="icon mif-calculator2 bg-darkGreen"></span>
+                                            <span class="title">Немного статистики</span>
+                                        </div>
+                                        <div class="content">
+                                            <div class="row cells2">
+                                                <div class="cell">
+                                                    <p class="margin0 place-right">Дней на портале:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                    <p class="margin0 place-right">Публикаций:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                    <p class="margin0 place-right">Усредненный рейтинг:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                    <p class="margin0 place-right">Комментариев:</p><br>
+                                                    <hr class="bg-darkerGray">
+                                                </div>
+                                                <div class="cell">
+                                                    @Model.Stats.DaysInService<br>
+                                                    <hr class="bg-darkerGray">
+                                                    @(Model.Stats.TotalPublications)<br>
+                                                    <hr class="bg-darkerGray">
+                                                    @(Model.Stats.AverageRating?.ToString() ?? "Не рассчитан")<br>
+                                                    <hr class="bg-darkerGray">
+                                                    @(Model.Stats.TotalComments)
+                                                    <hr class="bg-darkerGray">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<h2 align="center" class="text">Последние публикации</h2>
+@if (Model.Titles.ToList().Count == 0)
+{
+    <div class="partial-border align-center">
+        <h1><small>Опубликованных текстов не найдено</small>
+        </h1>
+        @if (isYourPage)
+        {
+            <a href="@Url.Action("Create", "TextDescription")"><button class="button success block-shadow-success">Создать публикацию!</button></a>
+        }
+    </div>
+}
+else
+{
+    foreach (var e in Model.Titles)
+    {
+        @Html.Partial("_TitlePartial", e)
+    }
+}
+
+<h2 align="center">Мнения о пользователе</h2>
+@if (Model.Comments.ToList().Count == 0)
+{
+    <div class="partial-border align-center">
+        <h1>
+            <small>Похоже, никто не высказал свои впечатления о @Model.User.Login...</small>
+        </h1>
+        @if (User.Identity.IsAuthenticated && !User.IsInRole("Banned"))
+        {
+            @Ajax.ActionLink("Оставьте свое мнение!", "Create", "Comment", new {relation = "User", objectId = Model.User.Id, userId = Profile["Id"]}, commentOptions, new {@class = "button success block-shadow-success", id = "show-comment-form"})
+            <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+        }
+    </div>
+}
+else
+{
+    foreach (var e in Model.Comments)
+    {
+     @Html.Partial("_CommentPartial", e)
+    }
+    if (User.Identity.IsAuthenticated && !User.IsInRole("Banned"))
+     {
+         <div class="align-center">
+             @Ajax.ActionLink("Оставьте свое мнение!", "Create", "Comment", new {relation = "User", objectId = Model.User.Id, userId = Profile["Id"]}, commentOptions, new {@class = "button success block-shadow-success", id = "show-comment-form"})
+             <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+         </div>
+     }
+}
+
+<div id="add-comment"></div>
+
+<div data-role="dialog" id="dialog" data-close-button="true" class="padding20 dialog">
+    <h1>Новый аватар</h1>
+    @using (@Html.BeginForm("AvatarUpload", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="input-control file" data-role="input" style="width: 200px">
+            <input type="file" name="file" accept="image/jpeg" id="file">
+            <button class="button"><span class="mif-folder"></span></button>
+        </div>
+        <button class="button success block-shadow-success">Загрузить</button>
+    }
+</div>
+
+<script>
+    $(window).load(function() {
+        if (document.getElementById("role").style.display === "none") {
+            document.getElementById("role-block").style.display = "none";
+        }
+    })
+</script>

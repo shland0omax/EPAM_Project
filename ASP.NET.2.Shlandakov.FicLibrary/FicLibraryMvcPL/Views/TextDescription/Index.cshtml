@@ -1,0 +1,88 @@
+﻿@using FicLibraryMvcPL.Infrastructure
+@model FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel
+@{
+    ViewBag.Title = Model.Title;
+    ViewBag.ShowMoreButton = false;
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "add-text",
+        HttpMethod = "GET",
+        LoadingElementId = "preloader"
+    };
+    var commentOptions = new AjaxOptions()
+    {
+        HttpMethod = "GET",
+        OnSuccess = "HideCreateButton",
+        UpdateTargetId = "add-comment",
+        LoadingElementId = "commentpreloader"
+    };
+    var hasAdminOptions = User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("Owner");
+    var hasModeratorOptions = User.Identity.IsAuthenticated && User.IsInRole("Moderator") || hasAdminOptions;
+    var isAuthor = User.Identity.IsAuthenticated && Model.Author.ProfileId == (int) Profile["Id"] && !User.IsInRole("Banned");
+}
+
+@Html.Partial("_TitlePartial")
+
+<div class="partial-border">
+    <h3>Содержание</h3>
+    <ol class="numeric-list square-marker dark-bullet">
+        @foreach (var text in Model.Texts)
+        {
+            <li>
+                @Html.ActionLink(text.Subtitle ,"Index", "Text", new {id = text.Id}, new { @class="text ", style="color: black"})
+                @if (isAuthor || (hasAdminOptions && ModelHelper.HaveAccessPrivilege(Model.Author.Login, User.Identity.Name)))
+                {
+                    <a href="@Url.Action("Edit", "Text",  new {id = text.Id})"><span class="icon mif-pencil"></span></a>
+                    <a href="@Url.Action("Delete", "Text", new {id = text.Id})"><span class="icon mif-cross"></span></a>
+                }
+            </li>
+        }
+    </ol><br>
+
+    <div id="add-text"></div>
+
+    <div class="align-center">
+        @if (isAuthor)
+        {
+            @Ajax.ActionLink("Создать", "Create", "Text", new {titleId = @Model.Id}, ajaxOptions, new {@class = "button success"})
+        }
+        @(Model.IsPublished
+              ? (hasModeratorOptions && ModelHelper.HaveAccessPrivilege(Model.Author.Login, User.Identity.Name))|| isAuthor ? Html.ActionLink("Изъять из опубликованного", "ChangePublicationState", new {textDescId = Model.Id}, new {@class = "button danger"}) : null
+              : isAuthor ? Html.ActionLink("Опубликовать", "ChangePublicationState", new {textDescId = Model.Id}, new {@class = "button warning"}) : null)
+    </div>
+    <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+</div>
+
+@if (Model.IsPublished && Model.Comments != null)
+{
+     <h3 class="align-center">Коментарии</h3>
+     if (Model.Comments.ToList().Count == 0)
+     {
+        <div class="partial-border align-center">
+            <h1>
+                <small>Похоже, никто не высказал свои впечатления о @Model.Title...</small>
+            </h1>
+            @if (User.Identity.IsAuthenticated && !User.IsInRole("Banned"))
+            {
+                @Ajax.ActionLink("Оставьте свое мнение!", "Create", "Comment", new { relation = "TextDescription", objectId = Model.Id, userId = Profile["Id"] }, commentOptions, new { @class = "button success block-shadow-success", id = "show-comment-form" })
+                <div class="align-center" id="comment-preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+            }
+        </div>
+     }
+     else
+     {
+         foreach (var e in Model.Comments)
+         {
+            @Html.Partial("_CommentPartial", e)
+         }
+         if (User.Identity.IsAuthenticated && !User.IsInRole("Banned"))
+         {
+            <div class="align-center">
+                @Ajax.ActionLink("Оставьте свое мнение!", "Create", "Comment", new { relation = "TextDescription", objectId = Model.Id, userId = Profile["Id"] }, commentOptions, new { @class = "button success block-shadow-success", id = "show-comment-form" })
+                <div class="align-center" id="comment-preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+            </div>
+         }
+     }
+}
+
+<div id="add-comment"></div>

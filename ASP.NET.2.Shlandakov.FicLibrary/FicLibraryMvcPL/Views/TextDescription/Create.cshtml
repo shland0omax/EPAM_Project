@@ -1,0 +1,47 @@
+﻿@model FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+<div class="partial-border">
+    <h2 class="align-center">Создание новой публикации</h2>
+
+    <h4>Пожалуйста, перед созданием публикации, ознакомьтесь с правилами:</h4>
+
+    <ol class="numeric-list green-bullet">
+        <li>Vestibulum malesuada vehicula orci. Nunc viverra mollis rutrum. Etiam velit velit, lobortis eu elit eu, interdum ultrices orci. Nunc volutpat viverra neque quis sodales. Vivamus in nulla venenatis, laoreet lacus in, iaculis urna. Vestibulum molestie eu orci a condimentum. </li>
+        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae nunc justo. Quisque dignissim, elit at vestibulum tristique, lorem metus dignissim nibh, vitae consequat ante nibh sit amet massa. </li>
+        <li>Nullam in tortor faucibus, feugiat neque et, dapibus sem. Nulla in maximus magna. Suspendisse augue nisl, scelerisque sit amet lobortis eu, tincidunt quis est. Maecenas ornare est sit amet orci lacinia fringilla.</li>
+        <li>Ut consectetur varius augue, mollis tristique nibh sodales sed. Phasellus hendrerit tempus magna sit amet elementum. In eget nisl eget leo lobortis faucibus. Cras ultrices non dolor faucibus convallis.</li>
+        <li>Nullam et eleifend ante, vel aliquet turpis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vestibulum eget turpis ac eros tempus ultricies ut quis nulla. Aenean laoreet lectus in ipsum facilisis aliquet. Etiam tristique porta orci, non imperdiet urna porttitor non. Suspendisse potenti. Phasellus convallis ex id mattis varius.</li>
+    </ol>
+    <h4>Категорически запрещается</h4>
+    <ol class="numeric-list red-bullet">
+        <li>Quisque sit amet elit ac turpis dictum posuere non a sapien.</li>
+        <li>Sed mattis nibh a euismod feugiat. Ut consectetur varius augue, mollis tristique nibh sodales sed.</li>
+        <li>Donec turpis tellus, suscipit quis risus sit amet, mattis mattis lacus. Sed eget volutpat felis. Mauris sit amet pellentesque ligula.</li>
+    </ol>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="grid">
+            <div class="row cells2">
+                <div class="cell">
+                    <p class="margin0 place-right">@Html.LabelFor(model => model.Title):</p><br>
+                    <hr class="bg-darkerGray">
+                </div>
+                <div class="cell">
+                    <div class="input-control text full-size margin0" data-role="validator input" style="margin: 10pt 0">
+                        @Html.EditorFor(model => model.Title)<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="align-center">
+            <input type="submit" value="Создать" class="button success" />
+        </div>
+    }
+
+</div>

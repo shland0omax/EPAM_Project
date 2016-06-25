@@ -1,0 +1,174 @@
+﻿@using FicLibraryMvcPL.Models
+@model FicLibraryMvcPL.Models.SearchViewModel
+@{
+    ViewBag.Title = "Поиск";
+    var searchAjaxOptions = new AjaxOptions()
+    {
+        UpdateTargetId = "searchResults",
+        HttpMethod = "Post",
+        LoadingElementId = "preloader",
+    };
+}
+
+@using (Ajax.BeginForm("RunSearch", "Home", searchAjaxOptions))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="pageNumber" id="pageNumber" value="1">
+    <input type="hidden" name="pageItemCount" id="pageItemCount" value="5">
+    <div class="accordion large-heading" data-role="accordion">
+        <div class="frame active">
+            <div class="heading">
+                Панель поиска
+            </div>
+            <div class="content">
+                <div class="grid margin0">
+                    <div class="row cells2">
+                        <div class="cell">
+                            <div class="window">
+                                <div class="window-caption">
+                                    <span class="window-caption-icon"><span class="icon mif-books"></span></span>
+                                    <span class="window-caption-title">Название</span>
+                                </div>
+                                <div class="window-content">
+                                    <div class="input-control text full-size">
+                                        @Html.EditorFor(model => model.Title)
+                                    </div>
+                                    <label class="input-control checkbox">
+                                        <input type="checkbox" data-val="true" id="SearchSubtitles" name="SearchSubtitles" value="true">
+                                        <span class="check"></span>
+                                        <span class="caption">@Html.LabelFor(model => model.SearchSubtitles)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="window">
+                                <div class="window-caption">
+                                    <span class="window-caption-icon"><span class="icon mif-calendar"></span></span>
+                                    <span class="window-caption-title">Дата опубликования</span>
+                                </div>
+                                <div class="window-content">
+                                    <div class="row cells5">
+                                        <div class="cell">
+                                            <p class="margin0 place-right">С :</p><br>
+                                            <hr class="bg-darkerGray">
+                                            <p class="margin0 place-right">По :</p><br>
+                                            <hr class="bg-darkerGray">
+                                        </div>
+                                        <div class="cell colspan4">
+                                            <div class="input-control text full-size" data-role="datepicker">
+                                                <input id="PublicationDateStart" name="PublicationDateStart" type="text">
+                                                <button class="button"><span class="mif-calendar"></span></button>
+                                            </div>
+                                            <div class="input-control text full-size" data-role="datepicker">
+                                                <input id="PublicationDateFinish" name="PublicationDateFinish" type="text">
+                                                <button class="button"><span class="mif-calendar"></span></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="cell ">
+                            <div class="window">
+                                <div class="window-caption">
+                                    <span class="window-caption-icon"><span class="icon mif-user"></span></span>
+                                    <span class="window-caption-title">Пользователь</span>
+                                </div>
+                                <div class="window-content">
+                                    <div class="input-control text full-size">
+                                        @Html.EditorFor(model => model.PublisherLogin)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="window">
+                                <div class="window-caption">
+                                    <span class="window-caption-icon"><span class="icon mif-calendar"></span></span>
+                                    <span class="window-caption-title">Рейтинг</span>
+                                </div>
+                                <div class="window-content">
+                                    <div class="row cells5">
+                                        <div class="cell">
+                                            <p class="margin0 place-right">С :</p><br>
+                                            <hr class="bg-darkerGray">
+                                            <p class="margin0 place-right">По :</p><br>
+                                            <hr class="bg-darkerGray">
+                                        </div>
+                                        <div class="cell colspan4">
+                                            <div class="input-control text full-size" data-role="text">
+                                                @Html.EditorFor(model => model.MinRating)
+                                            </div>
+                                            <div class="input-control text full-size" data-role="text">
+                                                @Html.EditorFor(model => model.MaxRating)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="input-control checkbox">
+                                            <input type="checkbox" checked data-val="true" id="IncludeUnrated" name="IncludeUnrated" value="true">
+                                            <span class="check"></span>
+                                            <span class="caption">@Html.LabelFor(model => model.IncludeUnrated)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row window">
+                        <div class="window-caption">
+                            <span class="window-caption-icon"><span class="icon mif-sort-asc"></span></span>
+                            <span class="window-caption-title">Сортировать по</span>
+                        </div>
+                        <div class="window-content">
+                            <div class="input-control radio full-size margin0 align-center" data-role="validator input" style="margin: 10pt 0">
+                                <label class="input-control radio small-check">
+                                    @Html.RadioButtonFor(model => model.SortParameter, SortParameter.Rating, new { value = (int)SortParameter.Rating})
+                                    <span class="check"></span>
+                                    <span class="caption">рейтингу</span>
+                                </label>
+                                <label class="input-control radio small-check">
+                                    @Html.RadioButtonFor(model => model.SortParameter, SortParameter.PublicationDate, new { value = (int)SortParameter.PublicationDate })
+                                    <span class="check"></span>
+                                    <span class="caption">дате публикации</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="align-center margin10">
+                    <input type="submit" class="button success block-shadow-success" value="Поиск" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+}
+
+<h2 class="align-center">Результаты поиска</h2>
+<div id="searchResults"></div>
+
+<script>
+    function pagination(pageNumber) {
+        $.ajax({
+            url: "@(Url.Action("RunSearch", "Home"))",
+            data: {
+                'Title': document.getElementById("Title").value,
+                'pageNumber': pageNumber,
+                'pageItemCount': document.getElementById("pageItemCount").value,
+                'SearchSubtitles': document.getElementById("SearchSubtitles").value,
+                'PublicationDateStart': document.getElementById("PublicationDateStart").value,
+                'PublicationDateFinish': document.getElementById("PublicationDateFinish").value,
+                'PublisherLogin': document.getElementById("PublisherLogin").value,
+                'MinRating': document.getElementById("MinRating").value,
+                'MaxRating': document.getElementById("MaxRating").value,
+                'IncludeUnrated': document.getElementById("IncludeUnrated").value,
+                'SortParameter': $('input[name=SortParameter]:radio:checked').val(),
+                '__RequestVerificationToken': $('[name=__RequestVerificationToken]').val()
+            },
+            type: 'POST',
+            success: function(response) {
+                document.getElementById("searchResults").innerHTML = response;
+            }
+        });
+    }
+</script>

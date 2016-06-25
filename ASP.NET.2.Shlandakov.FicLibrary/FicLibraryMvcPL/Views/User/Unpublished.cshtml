@@ -1,0 +1,12 @@
+﻿@model System.Collections.Generic.IEnumerable<FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel>
+@{
+    ViewBag.Title = "Unpublished";
+    ViewBag.ShowMoreButton = true;
+}
+
+<h2 class="align-center">Черновые публикации</h2>
+
+@foreach (var title in Model)
+{
+    @Html.Partial("_TitlePartial", title)
+}

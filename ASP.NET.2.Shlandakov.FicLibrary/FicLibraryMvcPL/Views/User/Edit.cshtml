@@ -1,0 +1,109 @@
+﻿@model FicLibraryMvcPL.Models.IdentityModels.ProfileViewModel
+
+
+
+@using (Html.BeginForm())
+{
+    <div class="partial-border margin20">
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <div class="grid">
+                <div class="row cells2">
+                    <div class="cell">
+                        <p class="margin0 place-right">@Html.LabelFor(model => model.FirstName):</p><br>
+                        <hr class="bg-darkerGray">
+                    </div>
+                    <div class="cell">
+                        <div class="input-control text full-size margin0" data-role="validator input" style="margin: 10pt 0">
+                            @Html.EditorFor(model => model.FirstName)<br>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cells2">
+                    <div class="cell">
+                        <p class="margin0 place-right">@Html.LabelFor(model => model.LastName):</p><br>
+                        <hr class="bg-darkerGray">
+                    </div>
+                    <div class="cell">
+                        <div class="input-control text full-size margin0" data-role="validator input" style="margin: 10pt 0">
+                            @Html.EditorFor(model => model.LastName)<br>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cells2">
+                    <div class="cell">
+                        <p class="margin0 place-right">@Html.LabelFor(model => model.DayOfBirth):</p><br>
+                        <hr class="bg-darkerGray">
+                    </div>
+                    <div class="cell">
+                        <div class="input-control text full-size" data-role="datepicker">
+                            <input id="DayOfBirth" name="DayOfBirth" type="text" value="@(Model.DayOfBirth?.Date.ToShortDateString() ?? "")">
+                            <button class="button"><span class="mif-calendar"></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cells2">
+                    <div class="cell">
+                        <p class="margin0 place-right">@Html.LabelFor(model => model.Mobile):</p><br>
+                        <hr class="bg-darkerGray">
+                    </div>
+                    <div class="cell">
+                        <div class="input-control text full-size margin0" data-role="validator input" style="margin: 10pt 0">
+                            @Html.EditorFor(model => model.Mobile)<br>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cells2">
+                    <div class="cell">
+                        <p class="margin0 place-right">@Html.LabelFor(model => model.Sex):</p><br>
+                        <hr class="bg-darkerGray">
+                    </div>
+                    <div class="cell">
+                        <div class="input-control radio full-size margin0" data-role="validator input" style="margin: 10pt 0">
+                            <label class="input-control radio small-check">
+                                @Html.RadioButtonFor(model => model.Sex, "", new {@checked = (Model.Sex == null)})
+                                <span class="check"></span>
+                                <span class="caption">Не указан</span>
+                            </label>
+                            <label class="input-control radio small-check">
+                                @Html.RadioButtonFor(model => model.Sex, true)
+                                <span class="check"></span>
+                                <span class="caption">Мужской</span>
+                            </label>
+                            <label class="input-control radio small-check">
+                                @Html.RadioButtonFor(model => model.Sex, false)
+                                <span class="check"></span>
+                                <span class="caption">Женский</span><br>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row cells2">
+                    <div class="cell">
+                        <p class="margin0 place-right">@Html.LabelFor(model => model.About):</p><br>
+                        <hr class="bg-darkerGray">
+                    </div>
+                    <div class="cell">
+                        <div class="margin0" data-role="validator input" style="margin: 10pt 0">
+                            <div class="input-control textarea full-size"
+                                 data-role="input" data-text-auto-resize="true" data-text-max-height="300px">
+                                @Html.TextAreaFor(model => model.About, new {htmlAttributes = new {style = "width:250px"}})
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @Html.ValidationSummary(true, "")
+            @Html.HiddenFor(model => model.Id)
+        </div>
+    </div>
+
+    <div class="form-horizontal align-center">
+        <div>
+            <input type="submit" value="Сохранить" class="button success"/>
+            @Html.ActionLink("Назад", "Index", new { id = Model.Id}, new {@class="button warning"})
+        </div>
+    </div>
+}

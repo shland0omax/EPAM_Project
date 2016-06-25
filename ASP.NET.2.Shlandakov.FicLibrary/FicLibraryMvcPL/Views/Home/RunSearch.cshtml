@@ -1,0 +1,34 @@
+﻿@using FicLibraryMvcPL.Infrastructure
+@model FicLibraryMvcPL.Models.PagedDataViewModel<FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel>
+@{
+    ViewBag.ShowMoreButton = true;
+}
+@if (Model?.Elements == null)
+{
+    <div class="partial-border align-center">
+        <h1>
+            <small>В ходе поиска произошла ошибка! Проверьте параметры поиска!</small>
+        </h1>
+    </div>
+}
+else if (Model.Elements.ToList().Count == 0)
+{
+    <div class="partial-border align-center">
+        <h1>
+            <small>Опубликованных текстов не найдено</small>
+        </h1>
+    </div>
+}
+else
+{
+    foreach (var e in Model.Elements)
+    {
+        @Html.Partial("_TitlePartial", e)
+    }
+    if (Model.PageInfo.TotalPages != 1)
+    {
+        <div class="align-center margin20">
+            @Html.Pagination(Model.PageInfo, "pagination")
+        </div>
+    }
+}

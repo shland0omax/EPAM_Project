@@ -1,0 +1,39 @@
+﻿@model FicLibraryMvcPL.Models.CommentViewModel
+@{
+    var ajaxOptions = new AjaxOptions()
+    {
+        HttpMethod = "POST",
+        OnSuccess = "CommentActionSuccess",
+        UpdateTargetId = "add-comment",
+        LoadingElementId = "preloader"
+    };
+}
+
+@using (Ajax.BeginForm("Create", "Comment", ajaxOptions)) 
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CommentatorId)
+    @Html.HiddenFor(model => model.CommentRelationId)
+    @Html.HiddenFor(model => model.ObjectId)
+
+
+    <div class="partial-border" >
+
+            @Html.LabelFor(model => model.Text)<br>
+            <div class="input-control textarea full-size"
+                 data-role="input">
+                @Html.TextAreaFor(model => model.Text, new {})
+            </div>
+        <div class="grid">
+            <div class="row cells2">
+                <div class="cell">
+                    @Html.ValidationMessageFor(model => model.Text)
+                    @Html.ValidationSummary(true, "", new { })
+                </div>
+                <div class="cell">
+                    <input type="submit" value="Отправить" class="button success place-right" />
+                </div>
+            </div>
+        </div>
+    </div>
+}

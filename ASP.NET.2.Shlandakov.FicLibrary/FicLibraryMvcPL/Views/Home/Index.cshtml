@@ -1,0 +1,40 @@
+﻿@model System.Collections.Generic.IEnumerable<FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel>
+@{
+    ViewBag.Title = "Заглавная";
+    ViewBag.ShowMoreButton = true;
+}
+
+<div class="carousel" data-role="carousel" data-height="500" data-period="10000" data-effect="fade"
+     data-control-next="<span class='mif-chevron-right'></span>"
+     data-control-prev="<span class='mif-chevron-left'></span>">
+    <div class="slide">
+        <img src="/Resources/1.jpg" alt="pic1"/>
+    </div>
+    <div class="slide">
+        <a href=""><img src="/Resources/2.jpg" alt="pic2"/></a>
+    </div>
+    <div class="slide">
+        <img src="/Resources/3.jpg" alt="pic3"/>
+    </div>
+    <div class="slide">
+        <img src="/Resources/4.jpg" alt="pic4"/>
+    </div>
+</div>
+
+<h1>Последние публикации</h1>
+@if (Model.ToList().Count == 0)
+{
+    <div class="partial-border align-center">
+        <h1>
+            <small>Опубликованных текстов не найдено. Будьте первым!</small>
+        </h1>
+            <a href="@Url.Action("Create", "TextDescription")"><button class="button success block-shadow-success">Создать публикацию!</button></a>
+    </div>
+}
+else
+{
+    foreach (var e in Model)
+    {
+        @Html.Partial("_TitlePartial", e)
+    }
+}

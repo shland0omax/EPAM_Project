@@ -1,0 +1,70 @@
+﻿@using FicLibraryMvcPL.Infrastructure
+@model FicLibraryMvcPL.Models.CommentViewModel
+@{
+    var commentEditOptions = new AjaxOptions()
+    {
+        HttpMethod = "Get",
+        UpdateTargetId = "add-comment"
+    };
+    var commentDeleteOptions = new AjaxOptions()
+    {
+        HttpMethod = "Post",
+        OnSuccess = "CommentActionSuccess",
+        UpdateTargetId = "add-comment"
+    };
+    var hasModeratorOptions = User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Owner") || User.IsInRole("Moderator"));
+    var isAuthor = User.Identity.IsAuthenticated && User.Identity.Name == Model.Sender.Login && !User.IsInRole("Banned");
+}
+
+<div class="partial-border">
+    <div class="grid">
+        <div class="row cells6">
+            <div class="cell">
+                <div class="image-container bordered">
+                    <div class="frame">
+                        @if (Model.SenderProfile.Avatar == null)
+                        {
+                            <img src="/Resources/no_avatar.png" alt="user empty avatar">
+                        }
+                        else
+                        {
+                            <img src="@String.Format("data:image/png;base64,{0}", Convert.ToBase64String(Model.SenderProfile.Avatar))" style="max-height: 200px; max-width: 120px" alt="user avatar"/>
+                        }
+                    </div>
+                </div>
+                <div class="text">
+                    <a style="color: black" href="@Url.Action("Index", "User", new {id = Model.Sender.ProfileId})"><h5 align="center">@Model.Sender.Login</h5></a>
+                    <p>С нами @Model.ShortStats.DaysInService дней</p>
+                    <p>Сообщений: @Model.ShortStats.TotalComments</p>
+                </div>
+            </div>
+            <div class="cell colspan5">
+                <div class="row cells12">
+                    <div class="cell offset8 colspan4">
+                        <p>Отправлено: @Model.PostDate</p>
+                    </div>
+                </div>
+                <div class="row cells12">
+                    <div class="cell colspan12">
+                        <pre class="full-size" style="font-family: 'Source Sans Pro'; white-space: pre-wrap;">@Model.Text</pre>
+                    </div>
+                </div>
+                <div class="row cells12 ">
+                    <div class="cell colspan5">
+                        @if (Model.LastEditDate != null)
+                        {
+                            <p class="margin10">Изменено: @Model.LastEditDate</p>
+                        }
+                    </div>
+                    <div class="cell offset3 colspan4 place-right">
+                        @if ((hasModeratorOptions && ModelHelper.HaveAccessPrivilege(Model.Sender.Login, User.Identity.Name))|| isAuthor)
+                        {
+                            @Ajax.ActionLink("Редактировать", "Edit", "Comment", new {id = Model.Id}, commentEditOptions, new {@class = "button success"});
+                            @Ajax.ActionLink("Удалить", "Delete", "Comment", new {id = Model.Id}, commentDeleteOptions, new {@class = "button danger "});
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+﻿@model FicLibraryMvcPL.Models.TextViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+@using (Html.BeginForm("Edit", "Text"))
+{
+    @Html.AntiForgeryToken()
+    
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.OrderInTitle)
+        @Html.HiddenFor(model => model.TitleId)
+
+    <div class="partial-border">
+
+        @Html.LabelFor(model => model.Subtitle, htmlAttributes: new {  })
+        <div class="input-control text full-size ">
+            @Html.EditorFor(model => model.Subtitle, new {htmlAttributes = new {}})
+        </div>
+
+        @Html.LabelFor(model => model.Content, htmlAttributes: new { })
+        <div class="input-control textarea full-size" data-role="input" data-text-auto-resize="true">
+            @Html.TextAreaFor(model => model.Content, new { style="resize:vertical;"} )
+        </div>
+
+        <div class="align-center">
+            <input type="submit" value="Сохранить" class="button success block-shadow-success" />
+            @Html.ActionLink("Back to List", "Index", new {}, new { @class="button"})
+        </div>
+    </div>
+}
+

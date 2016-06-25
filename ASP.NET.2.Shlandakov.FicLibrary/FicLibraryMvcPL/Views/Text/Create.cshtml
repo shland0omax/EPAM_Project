@@ -1,0 +1,33 @@
+﻿@model FicLibraryMvcPL.Models.TextViewModel
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "add-text",
+        HttpMethod = "POST",
+        LoadingElementId = "preloader",
+        OnSuccess = "RenewPage"
+    };
+}
+<div class="partial-border">
+@using (Ajax.BeginForm("Create", "Text", ajaxOptions))
+{
+    @Html.HiddenFor(model => model.TitleId)
+    <div class="grid">
+        <div class="row cells2">
+            <div class="cell">
+                <p class="margin0 place-right">@Html.LabelFor(model => model.Subtitle):</p><br>
+                <hr class="bg-darkerGray">
+            </div>
+            <div class="cell">
+                <div class="input-control text full-size margin0" data-role="validator input" style="margin: 10pt 0">
+                    @Html.EditorFor(model => model.Subtitle)<br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="align-center">
+        <input type="submit" value="Создать" class="button success margin10">
+    </div>
+}
+</div>
+

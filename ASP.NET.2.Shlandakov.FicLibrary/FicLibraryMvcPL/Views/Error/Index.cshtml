@@ -1,0 +1,16 @@
+﻿@model FicLibraryMvcPL.Models.ErrorViewModel
+@{
+    ViewBag.Title = "Ошибка!";
+}
+<div class="overlay">
+    <div class="login-form padding20">
+        <div class="partial-border">
+            <h1 class="text-light" align="center">Ошибка!</h1>
+            <hr class="thin"/><br>
+            <div align="center">
+                <h4>@Model.Message</h4>
+                @Html.ActionLink("Продолжить", "Index", "Home", new {}, new {@class = "button primary"})
+            </div>
+        </div>
+    </div>
+</div>
