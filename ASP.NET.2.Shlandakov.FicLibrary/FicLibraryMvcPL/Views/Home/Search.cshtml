@@ -7,6 +7,7 @@
         UpdateTargetId = "searchResults",
         HttpMethod = "Post",
         LoadingElementId = "preloader",
+        OnSuccess = "focusResult"
     };
 }
 
@@ -135,7 +136,7 @@
                     </div>
                 </div>
                 <div class="align-center margin10">
-                    <input type="submit" class="button success block-shadow-success" value="Поиск" />
+                    <input type="submit" id="search-submit" class="button success block-shadow-success" value="Поиск" />
                 </div>
             </div>
         </div>
@@ -170,5 +171,15 @@
                 document.getElementById("searchResults").innerHTML = response;
             }
         });
+    }
+
+    $(window).load(function() {
+        if (document.getElementById("Title").value != null) {
+            document.getElementById("search-submit").click();
+        }
+    });
+
+    function focusResult() {
+        $('html, body').animate({ scrollTop: $('#searchResults').offset().top }, 'slow');
     }
 </script>

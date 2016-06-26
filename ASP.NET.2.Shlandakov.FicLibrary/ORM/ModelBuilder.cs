@@ -55,13 +55,13 @@ namespace ORM
                 .HasMany(e => e.Rating)
                 .WithRequired(e => e.TextDescription)
                 .HasForeignKey(e => e.TextDescId)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(true);
 
             modelBuilder.Entity<TextDescription>()
                 .HasMany(e => e.Text)
                 .WithRequired(e => e.TextDescription)
                 .HasForeignKey(e => e.TitleId)
-                .WillCascadeOnDelete(false);
+                .WillCascadeOnDelete(true);
         }
         private static void UserBuilder(DbModelBuilder modelBuilder)
         {

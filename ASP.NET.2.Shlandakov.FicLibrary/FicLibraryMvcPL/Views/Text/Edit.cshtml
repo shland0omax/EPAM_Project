@@ -27,7 +27,7 @@
 
         <div class="align-center">
             <input type="submit" value="Сохранить" class="button success block-shadow-success" />
-            @Html.ActionLink("Back to List", "Index", new {}, new { @class="button"})
+            @Html.ActionLink("К оглавлению", "Index", "TextDescription", new { id = Model.TitleId}, new { @class="button"})
         </div>
     </div>
 }

@@ -58,6 +58,11 @@
         {
             @Ajax.ActionLink("Редактировать публикацию", "Edit", "TextDescription", new { titleId = @Model.Id }, tdEditOptions, new { @class = "button warning" })
         }
+        @if (isAuthor || User.IsInRole("Owner"))
+        {
+            <button class="button danger" onclick="showMetroDialog('#dialog')">Удалить</button>
+        }
+        <br>
         @(Model.IsPublished
               ? (hasModeratorOptions && ModelHelper.HaveAccessPrivilege(Model.Author.Login, User.Identity.Name))|| isAuthor ? Html.ActionLink("Изъять из опубликованного", "ChangePublicationState", new {textDescId = Model.Id}, new {@class = "button danger"}) : null
               : isAuthor ? Html.ActionLink("Опубликовать", "ChangePublicationState", new {textDescId = Model.Id}, new {@class = "button success"}) : null)
@@ -99,3 +104,19 @@
 }
 
 <div id="add-comment"></div>
+
+@if (isAuthor || User.IsInRole("Owner"))
+{
+    <div data-role="dialog" id="dialog" data-close-button="true" class="padding20 dialog">
+        <h1>Вы уверены?</h1>
+        <h4>Все изменения и данные будут утеряны!</h4>
+        @using (@Html.BeginForm("Delete", "TextDescription", new { }, FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" value="@Model.Id" name="titleId" id="titleId">
+            <div class="align-center">
+                <input type="submit" value="Удалить" class="button danger block-shadow-danger"/>
+            </div>
+        }
+    </div>
+}

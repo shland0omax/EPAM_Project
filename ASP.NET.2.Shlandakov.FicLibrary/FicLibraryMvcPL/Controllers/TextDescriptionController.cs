@@ -98,6 +98,17 @@ namespace FicLibraryMvcPL.Controllers
             return PartialView(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int titleId)
+        {
+            var title = tdService.GetEntityById(titleId);
+            if (userService.GetUserByLogin(User.Identity.Name).Id != title.AuthorId && !User.IsInRole("Owner"))
+                return RedirectToAction("AccessViolation", "Error");
+            tdService.DeleteEntity(title);
+            return RedirectToAction("Index", "Home");
+        }
+
         public ActionResult ChangePublicationState(int textDescId)
         {
             TextDescriptionEntity title;

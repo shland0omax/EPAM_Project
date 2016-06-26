@@ -17,6 +17,7 @@ namespace ORM
             Database.SetInitializer(new DbInitializer());
         }
 
+
         public virtual DbSet<Comment> Comment { get; set; }
         public virtual DbSet<CommentRelation> CommentRelation { get; set; }
         public virtual DbSet<Profile> Profile { get; set; }

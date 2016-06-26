@@ -43,6 +43,7 @@ namespace FicLibraryMvcPL.Controllers
                 model.OrderInTitle =
                     textService.GetTitleTextEntitiesWithoutContent(model.TitleId).Select(e => e.OrderInTitle).DefaultIfEmpty().Max() + 1;
                 textService.CreateEntity(Mapper.ToBll(model));
+                UpdateTitleEditDate(model.TitleId);
                 return Json(new { Success = true });
             }
             return PartialView(model);
@@ -66,6 +67,7 @@ namespace FicLibraryMvcPL.Controllers
             if (ModelState.IsValid)
             {
                 textService.UpdateEntity(Mapper.ToBll(model));
+                UpdateTitleEditDate(model.TitleId);
                 return RedirectToAction("Index", new {textId = model.Id});
             }
             return View(model);
@@ -80,6 +82,7 @@ namespace FicLibraryMvcPL.Controllers
             if (!ModelHelper.HaveAccessPrivilege(userService.GetEntityById(title.AuthorId).Login, User.Identity.Name))
                 return RedirectToAction("AccessViolation", "Error");
             textService.DeleteEntity(entityToDelete);
+            UpdateTitleEditDate(title.Id);
             return RedirectToAction("Index", "TextDescription", new {id = title.Id});
         }
 
@@ -98,6 +101,14 @@ namespace FicLibraryMvcPL.Controllers
             ViewBag.IsPublished = td.IsPublished;
             model.Comments = ModelHelper.ReadCommentsForModel("Text", id);
             return View(model);
+        }
+
+        [NonAction]
+        public void UpdateTitleEditDate(int titleId)
+        {
+            var title = tdService.GetEntityById(titleId);
+            title.LastEditDate = DateTime.Now;
+            tdService.UpdateEntity(title);
         }
     }
 }

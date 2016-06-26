@@ -21,19 +21,6 @@
     };
 }
 
-<div data-role="dialog" id="dialog" data-close-button="true" class="padding20 dialog">
-    <h1>Новый аватар</h1>
-    @using (@Html.BeginForm("AvatarUpload", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
-        <div class="input-control file" data-role="input" style="width: 200px">
-            <input type="file" name="file" accept="image/jpeg" id="file">
-            <button class="button"><span class="mif-folder"></span></button>
-        </div>
-        <input type="submit" value="Загрузить" class="button success block-shadow-success" />
-    }
-</div>
-
 <div class="grid">
     <div class="row cells5">
         <div class="cell">
@@ -128,7 +115,7 @@
                                                     <hr class="bg-darkerGray">
                                                 </div>
                                             </div>
-                                            <div id="role-block">
+                                            <div id="role-block" style="display: none">
                                                 @using (Ajax.BeginForm("ChangeUserRole", "Admin", adminOptions))
                                                 {
                                                     @Html.AntiForgeryToken()
@@ -256,11 +243,26 @@ else
 
 <div id="add-comment"></div>
 
+@if (isYourPage)
+{
+    <div data-role="dialog" id="dialog" data-close-button="true" class="padding20 dialog">
+        <h1>Новый аватар</h1>
+        @using (@Html.BeginForm("AvatarUpload", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="input-control file" data-role="input" style="width: 200px">
+                <input type="file" name="file" accept="image/jpeg" id="file">
+                <button class="button"><span class="mif-folder"></span></button>
+            </div>
+            <input type="submit" value="Загрузить" class="button success block-shadow-success" />
+        }
+    </div>
+}
 
 <script>
     $(window).load(function() {
-        if (document.getElementById("role").style.display === "none") {
-            document.getElementById("role-block").style.display = "none";
+        if (document.getElementById("role").style.display !== "none") {
+            document.getElementById("role-block").style.display = "inline";
         }
     })
 </script>
