@@ -1,4 +1,5 @@
-﻿using BLL.Entities;
+﻿using System;
+using BLL.Entities;
 using BLL.Interfaces;
 using DAL.DTO;
 using DAL.DTO.Models;
@@ -11,11 +12,13 @@ namespace BLL.Mappers
 
         public static IDalEntity ToDal(IBllEntity entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             return ToDal((dynamic)entity);
         }
 
         public static DalUser ToDal(UserEntity user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             return new DalUser()
             {
                 Id = user.Id,
@@ -30,6 +33,7 @@ namespace BLL.Mappers
 
         public static DalRole ToDal(RoleEntity role)
         {
+            if (role == null) throw new ArgumentNullException(nameof(role));
             return new DalRole()
             {
                 Id = role.Id,
@@ -40,6 +44,7 @@ namespace BLL.Mappers
 
         public static DalComment ToDal(CommentEntity comment)
         {
+            if (comment == null) throw new ArgumentNullException(nameof(comment));
             return new DalComment()
             {
                 Id = comment.Id,
@@ -54,6 +59,7 @@ namespace BLL.Mappers
 
         public static DalCommentRelation ToDal(CommentRelationEntity cre)
         {
+            if (cre == null) throw new ArgumentNullException(nameof(cre));
             return new DalCommentRelation()
             {
                 Id = cre.Id,
@@ -63,6 +69,7 @@ namespace BLL.Mappers
 
         public static DalText ToDal(TextEntity text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
             return new DalText()
             {
                 Id = text.Id,
@@ -75,6 +82,7 @@ namespace BLL.Mappers
 
         public static DalTextDescription ToDal(TextDescriptionEntity textDescription)
         {
+            if (textDescription == null) throw new ArgumentNullException(nameof(textDescription));
             return new DalTextDescription()
             {
                 Id = textDescription.Id,
@@ -89,6 +97,7 @@ namespace BLL.Mappers
 
         public static DalProfile ToDal(ProfileEntity profile)
         {
+            if (profile == null) throw new ArgumentNullException(nameof(profile));
             return new DalProfile()
             {
                 Id = profile.Id,
@@ -104,6 +113,7 @@ namespace BLL.Mappers
 
         public static DalRating ToDal(RatingEntity rating)
         {
+            if (rating == null) throw new ArgumentNullException(nameof(rating));
             return new DalRating()
             {
                 Id= rating.Id,
@@ -115,6 +125,7 @@ namespace BLL.Mappers
 
         public static DalSearch ToDal(SearchEntity search)
         {
+            if (search == null) throw new ArgumentNullException(nameof(search));
             return new DalSearch()
             {
                 Title = search.Title,
@@ -133,11 +144,13 @@ namespace BLL.Mappers
         #region ToBll methods
         public static IBllEntity ToBll(IDalEntity entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             return ToBll((dynamic)entity);
         }
 
         public static UserEntity ToBll(DalUser dalUser)
         {
+            if (dalUser == null) throw new ArgumentNullException(nameof(dalUser));
             return new UserEntity()
             {
                 Id = dalUser.Id,
@@ -152,6 +165,7 @@ namespace BLL.Mappers
 
         public static RoleEntity ToBll(DalRole dalRole)
         {
+            if (dalRole == null) throw new ArgumentNullException(nameof(dalRole));
             return new RoleEntity()
             {
                 Id = dalRole.Id,
@@ -162,6 +176,7 @@ namespace BLL.Mappers
 
         public static CommentEntity ToBll(DalComment dalComment)
         {
+            if (dalComment == null) throw new ArgumentNullException(nameof(dalComment));
             return new CommentEntity()
             {
                 Id = dalComment.Id,
@@ -176,6 +191,7 @@ namespace BLL.Mappers
 
         public static CommentRelationEntity ToBll(DalCommentRelation dcr)
         {
+            if (dcr == null) throw new ArgumentNullException(nameof(dcr));
             return new CommentRelationEntity()
             {
                 Id = dcr.Id,
@@ -185,6 +201,7 @@ namespace BLL.Mappers
 
         public static TextEntity ToBll(DalText dalText)
         {
+            if (dalText == null) throw new ArgumentNullException(nameof(dalText));
             return new TextEntity()
             {
                 Id = dalText.Id,
@@ -197,6 +214,7 @@ namespace BLL.Mappers
 
         public static TextDescriptionEntity ToBll(DalTextDescription dalTextDescription)
         {
+            if (dalTextDescription == null) throw new ArgumentNullException(nameof(dalTextDescription));
             return new TextDescriptionEntity()
             {
                 Id = dalTextDescription.Id,
@@ -211,6 +229,7 @@ namespace BLL.Mappers
 
         public static ProfileEntity ToBll(DalProfile dalProfile)
         {
+            if (dalProfile == null) throw new ArgumentNullException(nameof(dalProfile));
             return new ProfileEntity()
             {
                 Id = dalProfile.Id,
@@ -226,6 +245,7 @@ namespace BLL.Mappers
 
         public static RatingEntity ToBll(DalRating rating)
         {
+            if (rating == null) throw new ArgumentNullException(nameof(rating));
             return new RatingEntity()
             {
                 Id = rating.Id,

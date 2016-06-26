@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BLL.Entities;
 using FicLibraryMvcPL.Models;
@@ -12,6 +13,7 @@ namespace FicLibraryMvcPL.Mappers
         #region ToView methods
         public static UserViewModel ToView(UserEntity user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             return new UserViewModel()
             {
                 Id = user.Id,
@@ -25,6 +27,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static RoleViewModel ToView(RoleEntity role)
         {
+            if (role == null) throw new ArgumentNullException(nameof(role));
             return new RoleViewModel
             {
                 Id = role.Id,
@@ -35,6 +38,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static CommentViewModel ToView(CommentEntity comment)
         {
+            if (comment == null) throw new ArgumentNullException(nameof(comment));
             return new CommentViewModel()
             {
                 Id = comment.Id,
@@ -49,6 +53,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static TextViewModel ToView(TextEntity text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
             return new TextViewModel()
             {
                 Id = text.Id,
@@ -61,6 +66,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static TextDescriptionViewModel ToView(TextDescriptionEntity textDescription)
         {
+            if (textDescription == null) throw new ArgumentNullException(nameof(textDescription));
             return new TextDescriptionViewModel()
             {
                 Id = textDescription.Id,
@@ -75,6 +81,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static ProfileViewModel ToView(ProfileEntity profile)
         {
+            if (profile == null) throw new ArgumentNullException(nameof(profile));
             return new ProfileViewModel()
             {
                 Id = profile.Id,
@@ -91,6 +98,7 @@ namespace FicLibraryMvcPL.Mappers
         public static PagedDataViewModel<T> ToPagedView<T>(this
             IEnumerable<T> elements, int elemsPerPage, int pageNumber) where T: class 
         {
+            if (elements == null) throw new ArgumentNullException(nameof(elements));
             return new PagedDataViewModel<T>
             {
                 PageInfo = new PageInfo()
@@ -109,6 +117,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static UserEntity ToBll(UserViewModel user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             return new UserEntity()
             {
                 Id = user.Id,
@@ -122,6 +131,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static RoleEntity ToBll(RoleViewModel role)
         {
+            if (role == null) throw new ArgumentNullException(nameof(role));
             return new RoleEntity()
             {
                 Id = role.Id,
@@ -132,6 +142,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static CommentEntity ToBll(CommentViewModel comment)
         {
+            if (comment == null) throw new ArgumentNullException(nameof(comment));
             return new CommentEntity()
             {
                 Id = comment.Id,
@@ -146,6 +157,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static TextEntity ToBll(TextViewModel text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
             return new TextEntity()
             {
                 Id = text.Id,
@@ -158,6 +170,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static TextDescriptionEntity ToBll(TextDescriptionViewModel textDescription)
         {
+            if (textDescription == null) throw new ArgumentNullException(nameof(textDescription));
             return new TextDescriptionEntity()
             {
                 Id = textDescription.Id,
@@ -172,6 +185,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static ProfileEntity ToBll(ProfileViewModel profile)
         {
+            if (profile == null) throw new ArgumentNullException(nameof(profile));
             return new ProfileEntity()
             {
                 Id = profile.Id,
@@ -187,6 +201,7 @@ namespace FicLibraryMvcPL.Mappers
 
         public static SearchEntity ToBll(SearchViewModel search)
         {
+            if (search == null) throw new ArgumentNullException(nameof(search));
             return new SearchEntity
             {
                 Title = search.Title,

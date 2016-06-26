@@ -11,11 +11,13 @@ namespace DAL.Mappers
 
         public static IDalEntity ToDal(IOrmEntity entity)
         {
+            if(entity == null) throw new ArgumentNullException(nameof(entity));
             return ToDal((dynamic)entity);
         }
 
         public static DalUser ToDal(User user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             return new DalUser
             {
                 Id = user.Id,
@@ -29,7 +31,8 @@ namespace DAL.Mappers
         }
 
         public static DalRole ToDal(Role role)
-        {          
+        {
+            if (role == null) throw new ArgumentNullException(nameof(role));
             return new DalRole
             {
                 Id = role.Id,
@@ -41,6 +44,7 @@ namespace DAL.Mappers
 
         public static DalComment ToDal(Comment comment)
         {
+            if (comment == null) throw new ArgumentNullException(nameof(comment));
             return new DalComment
             {
                 Id = comment.Id,
@@ -55,6 +59,7 @@ namespace DAL.Mappers
 
         public static DalCommentRelation ToDal(CommentRelation relation)
         {
+            if (relation == null) throw new ArgumentNullException(nameof(relation));
             return new DalCommentRelation()
             {
                 Id = relation.Id,
@@ -64,6 +69,7 @@ namespace DAL.Mappers
 
         public static DalText ToDal(Text text)
         {
+            if (text == null) throw new ArgumentNullException(nameof(text));
             return new DalText
             {
                 Id = text.Id,
@@ -76,6 +82,7 @@ namespace DAL.Mappers
 
         public static DalTextDescription ToDal(TextDescription textDescription)
         {
+            if (textDescription == null) throw new ArgumentNullException(nameof(textDescription));
             return new DalTextDescription
             {
                 Id = textDescription.Id,
@@ -90,6 +97,7 @@ namespace DAL.Mappers
 
         public static DalProfile ToDal(Profile profile)
         {
+            if (profile == null) throw new ArgumentNullException(nameof(profile));
             return new DalProfile
             {
                 Id = profile.Id,
@@ -105,6 +113,7 @@ namespace DAL.Mappers
 
         public static DalRating ToDal(Rating rating)
         {
+            if (rating == null) throw new ArgumentNullException(nameof(rating));
             return new DalRating
             {
                 Id = rating.Id,
@@ -119,11 +128,13 @@ namespace DAL.Mappers
         #region ToOrm methods
         public static IOrmEntity ToOrm(IDalEntity entity)
         {
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
             return ToOrm((dynamic)entity);
         }
 
         public static User ToOrm(DalUser dalUser)
         {
+            if (dalUser == null) throw new ArgumentNullException(nameof(dalUser));
             return new User()
             {
                 Id = dalUser.Id,
@@ -138,6 +149,7 @@ namespace DAL.Mappers
 
         public static Role ToOrm(DalRole dalRole)
         {
+            if (dalRole == null) throw new ArgumentNullException(nameof(dalRole));
             return new Role
             {
                 Id = dalRole.Id,
@@ -149,6 +161,7 @@ namespace DAL.Mappers
 
         public static Comment ToOrm(DalComment dalComment)
         {
+            if (dalComment == null) throw new ArgumentNullException(nameof(dalComment));
             return new Comment()
             {
                 Id = dalComment.Id,
@@ -163,6 +176,7 @@ namespace DAL.Mappers
 
         public static CommentRelation ToOrm(DalCommentRelation relation)
         {
+            if (relation == null) throw new ArgumentNullException(nameof(relation));
             return new CommentRelation()
             {
                 Id = relation.Id,
@@ -172,6 +186,7 @@ namespace DAL.Mappers
 
         public static Text ToOrm(DalText dalText)
         {
+            if (dalText == null) throw new ArgumentNullException(nameof(dalText));
             return new Text()
             {
                 Id = dalText.Id,
@@ -183,6 +198,7 @@ namespace DAL.Mappers
 
         public static TextDescription ToOrm(DalTextDescription dalTextDescription)
         {
+            if (dalTextDescription == null) throw new ArgumentNullException(nameof(dalTextDescription));
             return new TextDescription()
             {
                 Id = dalTextDescription.Id,
@@ -197,6 +213,7 @@ namespace DAL.Mappers
 
         public static Profile ToOrm(DalProfile dalProfile)
         {
+            if (dalProfile == null) throw new ArgumentNullException(nameof(dalProfile));
             return new Profile()
             {
                 Id = dalProfile.Id,
@@ -213,6 +230,7 @@ namespace DAL.Mappers
 
         public static Rating ToOrm(DalRating rating)
         {
+            if (rating == null) throw new ArgumentNullException(nameof(rating));
             return new Rating()
             {
                 Id = rating.Id,
