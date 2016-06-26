@@ -9,6 +9,12 @@
         HttpMethod = "GET",
         LoadingElementId = "preloader"
     };
+    var tdEditOptions = new AjaxOptions
+    {
+        UpdateTargetId = "td-edit",
+        HttpMethod = "GET",
+        LoadingElementId = "preloader"
+    };
     var commentOptions = new AjaxOptions()
     {
         HttpMethod = "GET",
@@ -22,6 +28,8 @@
 }
 
 @Html.Partial("_TitlePartial")
+
+<div id="td-edit"></div>
 
 <div class="partial-border">
     <h3>Содержание</h3>
@@ -44,11 +52,16 @@
     <div class="align-center">
         @if (isAuthor)
         {
-            @Ajax.ActionLink("Создать", "Create", "Text", new {titleId = @Model.Id}, ajaxOptions, new {@class = "button success"})
+            @Ajax.ActionLink("Добавить текст", "Create", "Text", new {titleId = @Model.Id}, ajaxOptions, new {@class = "button success"})
+        }
+        @if (isAuthor)
+        {
+            @Ajax.ActionLink("Редактировать публикацию", "Edit", "TextDescription", new { titleId = @Model.Id }, tdEditOptions, new { @class = "button warning" })
         }
         @(Model.IsPublished
               ? (hasModeratorOptions && ModelHelper.HaveAccessPrivilege(Model.Author.Login, User.Identity.Name))|| isAuthor ? Html.ActionLink("Изъять из опубликованного", "ChangePublicationState", new {textDescId = Model.Id}, new {@class = "button danger"}) : null
-              : isAuthor ? Html.ActionLink("Опубликовать", "ChangePublicationState", new {textDescId = Model.Id}, new {@class = "button warning"}) : null)
+              : isAuthor ? Html.ActionLink("Опубликовать", "ChangePublicationState", new {textDescId = Model.Id}, new {@class = "button success"}) : null)
+
     </div>
     <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
 </div>

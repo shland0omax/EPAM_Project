@@ -69,16 +69,22 @@ namespace FicLibraryMvcPL.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var entity = commentService.GetEntityById(id);
-            if (entity != null)
+            try
             {
+                var entity = commentService.GetEntityById(id);
+                if (
+                    !ModelHelper.HaveAccessPrivilege(userService.GetEntityById(entity.CommentatorId).Login,
+                        User.Identity.Name))
+                    return RedirectToAction("AccessViolation", "Error");
                 commentService.DeleteEntity(entity);
-                return Json(new { Success = true });
+                return Json(new {Success = true});
             }
-            return RedirectToAction("BadRequest", "Error");
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Index", "Error");
+            }
         }
     }
 }

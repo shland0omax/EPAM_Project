@@ -1,13 +1,28 @@
-﻿@model System.Collections.Generic.IEnumerable<FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel>
+﻿@using FicLibraryMvcPL.Infrastructure
+@model FicLibraryMvcPL.Models.PagedDataViewModel<FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel>
 @{
     ViewBag.Title = "Published";
     ViewBag.ShowMoreButton = true;
 }
 
 <h2 class="align-center">Публикации пользователя @ViewBag.AuthorLogin</h2>
+<div id="published">
+    @Html.Partial("_List", Model)
+</div>
 
-@foreach (var title in Model)
-{
-    @Html.Partial("_TitlePartial", title)
-}
-
+<script>
+    function pagination(pageNumber) {
+        $.ajax({
+            url: "@(Url.Action("Published", "User"))",
+            data: {
+                'profileId': document.getElementById("profileId").value,
+                'pageNumber': pageNumber,
+                'pageSize': document.getElementById("pageSize").value
+            },
+            type: 'GET',
+            success: function(response) {
+                document.getElementById("published").innerHTML = response;
+            }
+        });
+    }
+</script>

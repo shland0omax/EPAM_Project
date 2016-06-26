@@ -12,8 +12,10 @@ namespace FicLibraryMvcPL.Models.BllModels
 
         public DateTime? LastEditDate { get; set; }
 
+        [Required]
         [Display(Name = "Заголовок")]
-        [MaxLength(200, ErrorMessage = "Длина заголовка превышает допустимую(200 символов)"), MinLength(3, ErrorMessage = "Заголовок слишком короток!")]
+        [MaxLength(200, ErrorMessage = "Длина заголовка превышает допустимую(200 символов)")]
+        [MinLength(3, ErrorMessage = "Заголовок слишком короток!")]
         public string Title { get; set; }
 
         public int AuthorId { get; set; }

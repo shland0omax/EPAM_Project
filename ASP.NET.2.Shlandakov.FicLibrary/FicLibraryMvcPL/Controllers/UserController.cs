@@ -56,14 +56,8 @@ namespace FicLibraryMvcPL.Controllers
             model.Profile = Mapper.ToView(profileEntity);
             model.User = Mapper.ToView(userService.GetUserByProfileId(model.Profile.Id));
             model.Stats = ModelHelper.ReadUserStats(model.User.Id, true);
-            var lastPublications = tdService.GetLastUserTextDescriptionEntitiesWithSkip(model.User.Id, 3, 0).Select(Mapper.ToView).ToList();
-            for (int i = 0; i < lastPublications.Count; i++)
-            {
-                lastPublications[i].Author = model.User;
-                lastPublications[i].AuthorProfile = model.Profile;
-                lastPublications[i].Rating = ratingService.GetAverageRatingForTitle(lastPublications[i].Id);
-            }
-            model.Titles = lastPublications;
+            var lastPublications = tdService.GetLastUserTextDescriptionEntitiesWithSkip(model.User.Id, 3, 0).Select(Mapper.ToView);
+            model.Titles = ModelHelper.ReadTextDescriptionsAdditionInfo(lastPublications);
             var relationId = commentRelationService.GetCommentRelationIdByName("User");
             var lastComments =
                 commentService.GetLastCommentsAboutObjectWithSkip(relationId, model.User.Id, 5, 0).Select(Mapper.ToView).ToList();
@@ -122,34 +116,62 @@ namespace FicLibraryMvcPL.Controllers
             return RedirectToAction("Index", new {id = model.Id});
         }
 
-        public ActionResult Published(int profileId)
+        public ActionResult Published(int profileId, int pageNumber=1, int pageSize=10)
         {
-            var profile = Mapper.ToView(profileService.GetEntityById(profileId));
-            var author = Mapper.ToView(userService.GetUserByProfileId(profileId));
-            var publishedList = tdService.GetUsersPublishedTextDesc(author.Id).Select(Mapper.ToView).ToList();
-            for (int i = 0; i < publishedList.Count; i++)
+            try
             {
-                publishedList[i].Author = author;
-                publishedList[i].AuthorProfile = profile;
-                publishedList[i].Rating = Math.Round(ratingService.GetAverageRatingForTitle(publishedList[i].Id),2);
+                var profile = Mapper.ToView(profileService.GetEntityById(profileId));
+                var author = Mapper.ToView(userService.GetUserByProfileId(profileId));
+                var paged = tdService.GetUsersPublishedTextDesc(author.Id).Select(Mapper.ToView).ToPagedView(pageSize, pageNumber);
+                var list = paged.Elements.ToList();
+                for (int i = 0; i < list.Count; i++)
+                {
+                    list[i].Author = author;
+                    list[i].AuthorProfile = profile;
+                    list[i].Rating = Math.Round(ratingService.GetAverageRatingForTitle(list[i].Id), 2);
+                }
+                paged.Elements = list;
+                ViewBag.AuthorLogin = author.Login;
+                return View(paged);
             }
-            ViewBag.AuthorLogin = author.Login;
-            return View(publishedList);
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Index", "Error");
+            }
+            catch
+            {
+                return RedirectToAction("Internal", "Error");
+            }
         }
 
         [Authorize]
-        public ActionResult Unpublished(int profileId)
+        public ActionResult Unpublished(int profileId, int pageNumber = 1, int pageSize = 10)
         {
-            if (profileId != (int) Profile["Id"]) return RedirectToAction("AccessViolation", "Error");
-            var profile = Mapper.ToView(profileService.GetEntityById(profileId));
-            var author = Mapper.ToView(userService.GetUserByProfileId(profileId));
-            var unpublished = tdService.GetUsersUnpublishedTextDesc(author.Id).Select(Mapper.ToView).ToList();
-            for (int i = 0; i < unpublished.Count; i++)
+            try
             {
-                unpublished[i].Author = author;
-                unpublished[i].AuthorProfile = profile;
+                if (profileId != (int) Profile["Id"]) return RedirectToAction("AccessViolation", "Error");
+                var profile = Mapper.ToView(profileService.GetEntityById(profileId));
+                var author = Mapper.ToView(userService.GetUserByProfileId(profileId));
+                var paged = tdService.GetUsersUnpublishedTextDesc(author.Id)
+                    .Select(Mapper.ToView)
+                    .ToPagedView(pageSize, pageNumber);
+                var unpublished = paged.Elements.ToList();
+                for (int i = 0; i < unpublished.Count; i++)
+                {
+                    unpublished[i].Author = author;
+                    unpublished[i].AuthorProfile = profile;
+                }
+                paged.Elements = unpublished;
+                return View(paged);
             }
-            return View(unpublished);
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Index", "Error");
+            }
+            catch
+            {
+                return RedirectToAction("Internal", "Error");
+            }
         }
     }
 }

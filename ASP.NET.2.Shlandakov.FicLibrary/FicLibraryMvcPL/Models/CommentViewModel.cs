@@ -13,6 +13,7 @@ namespace FicLibraryMvcPL.Models
     {
         public int Id { get; set; }
 
+        [Required]
         [Display(Name = "Ваш комментарий")]
         [MinLength(5, ErrorMessage = "Длина комментария не должна быть меньше 5 символов!")]
         public string Text { get; set; }

@@ -220,6 +220,9 @@ else
     {
         @Html.Partial("_TitlePartial", e)
     }
+    <div class="align-center">
+        @Html.ActionLink("Все публикации пользователя", "Published", new {profileId = Model.User.ProfileId}, new {@class = "button success block-shadow-success"})
+    </div>
 }
 
 <h2 align="center">Мнения о пользователе</h2>

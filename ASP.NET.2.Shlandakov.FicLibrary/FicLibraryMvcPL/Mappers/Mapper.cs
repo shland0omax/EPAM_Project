@@ -88,10 +88,10 @@ namespace FicLibraryMvcPL.Mappers
             };
         }
 
-        public static PagedDataViewModel<TextDescriptionViewModel> ToPagedView(this
-            IEnumerable<TextDescriptionViewModel> elements, int elemsPerPage, int pageNumber)
+        public static PagedDataViewModel<T> ToPagedView<T>(this
+            IEnumerable<T> elements, int elemsPerPage, int pageNumber) where T: class 
         {
-            return new PagedDataViewModel<TextDescriptionViewModel>
+            return new PagedDataViewModel<T>
             {
                 PageInfo = new PageInfo()
                 {

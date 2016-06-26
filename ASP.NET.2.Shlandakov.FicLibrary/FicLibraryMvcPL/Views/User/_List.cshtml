@@ -1,0 +1,35 @@
+﻿@using System.Web.Mvc.Html
+@using FicLibraryMvcPL.Infrastructure
+@model FicLibraryMvcPL.Models.PagedDataViewModel<FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel>
+
+@if (Model?.Elements == null)
+{
+    <div class="partial-border align-center">
+        <h1>
+            <small>При обработке запроса произошла ошибка</small>
+        </h1>
+    </div>
+}
+else if (Model.Elements.ToList().Count == 0)
+{
+    <div class="partial-border align-center">
+        <h1>
+            <small>Публикаций не найдено</small>
+        </h1>
+    </div>
+}
+else
+{
+    foreach (var e in Model.Elements)
+    {
+        @Html.Partial("_TitlePartial", e)
+    }
+    if (Model.PageInfo.TotalPages != 1)
+    {
+        <input type="hidden" id="profileId" name="profileId" value="@Model.Elements.ToList()[0].Author.ProfileId">
+        <input type="hidden" id="pageSize" name="pageSize" value="10">
+        <div class="align-center margin20">
+            @Html.Pagination(Model.PageInfo, "pagination")
+        </div>
+    }
+}

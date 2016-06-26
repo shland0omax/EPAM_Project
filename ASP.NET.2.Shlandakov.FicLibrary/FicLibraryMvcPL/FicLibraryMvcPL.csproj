@@ -224,7 +224,6 @@
     <Compile Include="Models\AuthModels\RegisterViewModel.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\IdentityModels\UserStatsViewModel.cs" />
-    <Compile Include="Models\LikeViewModel.cs" />
     <Compile Include="Models\IdentityModels\ProfileViewModel.cs" />
     <Compile Include="Models\BllModels\RoleViewModel.cs" />
     <Compile Include="Models\BllModels\TextDescriptionViewModel.cs" />
@@ -272,6 +271,8 @@
     <Content Include="Views\Home\Search.cshtml" />
     <Content Include="Views\Home\RunSearch.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\User\_List.cshtml" />
+    <Content Include="Views\TextDescription\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

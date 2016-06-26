@@ -1,0 +1,41 @@
+﻿@model FicLibraryMvcPL.Models.BllModels.TextDescriptionViewModel
+
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        UpdateTargetId = "td-edit",
+        HttpMethod = "POST",
+        LoadingElementId = "edit-preloader",
+        OnSuccess = "RenewPage"
+    };
+}
+<div class="partial-border">
+    @using (Ajax.BeginForm("Edit", "TextDescription", ajaxOptions))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.AuthorId)
+        @Html.HiddenFor(model => model.LastEditDate)
+        @Html.HiddenFor(model => model.CreationDate)
+        @Html.HiddenFor(model => model.IsPublished)
+        @Html.HiddenFor(model => model.PublicationDate)
+
+        <div class="grid">
+            <div class="row cells2">
+                <div class="cell">
+                    <p class="margin0 place-right">@Html.LabelFor(model => model.Title):</p><br>
+                    <hr class="bg-darkerGray">
+                </div>
+                <div class="cell">
+                    <div class="input-control text full-size margin0" data-role="validator input" style="margin: 10pt 0">
+                        @Html.EditorFor(model => model.Title)<br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="align-center">
+            <input type="submit" value="Создать" class="button success margin10">
+            <div class="align-center" id="edit-preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+        </div>
+    }
+</div>

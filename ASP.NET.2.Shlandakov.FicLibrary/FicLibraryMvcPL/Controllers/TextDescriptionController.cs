@@ -60,14 +60,42 @@ namespace FicLibraryMvcPL.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(TextDescriptionViewModel model)
         {
+            if (!ModelState.IsValid) return View(model);
+            model.AuthorId = userService.GetUserByLogin(User.Identity.Name).Id;
+            model.CreationDate = DateTime.Now;
+            var newId = tdService.CreateEntityWithIdReturn(Mapper.ToBll(model));
+            return RedirectToAction("Index", new {id = newId});
+        }
+
+        [HttpGet]
+        public ActionResult Edit(int? titleId)
+        {
+            if (titleId == null) return RedirectToAction("Index", "Error");
+            TextDescriptionViewModel td;
+            try
+            {
+                td = Mapper.ToView(tdService.GetEntityById((int) titleId));
+            }
+            catch (ArgumentNullException)
+            {
+                return RedirectToAction("Index", "Error");
+            }
+            if (userService.GetUserByLogin(User.Identity.Name).Id != tdService.GetEntityById((int) titleId).AuthorId)
+                return RedirectToAction("AccessViolation", "Error");
+            return PartialView(td);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(TextDescriptionViewModel model)
+        {
             if (ModelState.IsValid)
             {
-                model.AuthorId = userService.GetUserByLogin(User.Identity.Name).Id;
-                model.CreationDate = DateTime.Now;
-                var newId = tdService.CreateEntityWithIdReturn(Mapper.ToBll(model));
-                return RedirectToAction("Index", new {id = newId});
+                model.LastEditDate = DateTime.Now;
+                tdService.UpdateEntity(Mapper.ToBll(model));
+                return Json(new {Success = true});
             }
-            return View(model);
+            return PartialView(model);
         }
 
         public ActionResult ChangePublicationState(int textDescId)

@@ -11,6 +11,7 @@ namespace FicLibraryMvcPL.Models
         public int Id { get; set; }
         public string Content { get; set; }
 
+        [Required]
         [Display(Name = "Подзаголовок")]
         [MaxLength(200, ErrorMessage = "Длина заголовка превышает допустимую(200 символов)"), MinLength(3, ErrorMessage = "Заголовок слишком короток!")]
         public string Subtitle { get; set; }
