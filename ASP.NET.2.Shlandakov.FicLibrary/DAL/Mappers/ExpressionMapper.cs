@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Linq.Expressions;
-using DAL.DTO;
 using DAL.DTO.Models;
 using ORM;
 
@@ -99,12 +98,25 @@ namespace DAL.Mappers
 
         public static Expression<Func<Rating, DalRating>> ToDal(DbSet<Rating> temp)
         {
-            return rating => new DalRating()
+            return rating => new DalRating
             {
                 Id = rating.Id,
                 TextDescId = rating.TextDescId,
                 UserId = rating.UserId,
                 Value = rating.value
+            };
+        }
+
+        public static Expression<Func<News, DalNews>> ToDal(DbSet<News> temp)
+        {
+            return news => new DalNews
+            {
+                Id = news.Id,
+                CreatorId = news.CreatorId,
+                Content = news.Content,
+                Image = news.Image,
+                PublicationDate = news.PublicationDate,
+                Title = news.Title
             };
         }
     } 

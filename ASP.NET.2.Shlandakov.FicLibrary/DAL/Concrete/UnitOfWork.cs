@@ -17,6 +17,7 @@ namespace DAL.Concrete
         private TextRepository texts;
         private Repository<DalUser, User> users;
         private Repository<DalRole, Role> roles;
+        private Repository<DalNews, News> news;
 
 
         public UnitOfWork(FicLibraryDB context)
@@ -33,6 +34,7 @@ namespace DAL.Concrete
         public ITextRepository Texts => texts ?? (texts = new TextRepository(Context));
         public IRepository<DalUser> Users => users ?? (users = new Repository<DalUser, User>(Context));
         public IRepository<DalRole> Roles => roles ?? (roles = new Repository<DalRole, Role>(Context));
+        public IRepository<DalNews> News => news ?? (news = new Repository<DalNews, News>(Context)); 
 
         public void Commit()
         {

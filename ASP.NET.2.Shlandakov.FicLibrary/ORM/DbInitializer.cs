@@ -40,10 +40,12 @@ namespace ORM
             CommentRelation td = new CommentRelation { RelationName = "Text"};
             CommentRelation text = new CommentRelation { RelationName = "TextDescription" };
             CommentRelation user = new CommentRelation {RelationName = "User"};
+            CommentRelation news = new CommentRelation { RelationName = "News"};
 
             context.CommentRelation.Add(td);
             context.CommentRelation.Add(text);
             context.CommentRelation.Add(user);
+            context.CommentRelation.Add(news);
 
             base.Seed(context);
         }

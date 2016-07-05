@@ -139,6 +139,20 @@ namespace BLL.Mappers
             };
         }
 
+        public static DalNews ToDal(NewsEntity news)
+        {
+            if (news == null) throw new ArgumentNullException(nameof(news));
+            return new DalNews
+            {
+                Id = news.Id,
+                Content = news.Content,
+                CreatorId = news.CreatorId,
+                Image = news.Image,
+                PublicationDate = news.PublicationDate,
+                Title = news.Title
+            };
+        }
+
         #endregion
 
         #region ToBll methods
@@ -252,6 +266,20 @@ namespace BLL.Mappers
                 UserId = rating.UserId,
                 TextDescId = rating.TextDescId,
                 Value = rating.Value
+            };
+        }
+
+        public static NewsEntity ToBll(DalNews news)
+        {
+            if (news == null) throw new ArgumentNullException(nameof(news));
+            return new NewsEntity
+            {
+                Id = news.Id,
+                Content = news.Content,
+                CreatorId = news.CreatorId,
+                Image = news.Image,
+                PublicationDate = news.PublicationDate,
+                Title = news.Title
             };
         }
         #endregion

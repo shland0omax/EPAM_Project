@@ -91,6 +91,12 @@ namespace ORM
                 .HasMany(e => e.Rating)
                 .WithRequired(e => e.User)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<User>()
+                .HasMany(e => e.News)
+                .WithRequired(e => e.Creator)
+                .HasForeignKey(e => e.CreatorId)
+                .WillCascadeOnDelete(false);
         }
 
     }

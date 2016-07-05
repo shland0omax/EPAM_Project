@@ -1,0 +1,33 @@
+﻿@model FicLibraryMvcPL.Models.NewsPostModel
+
+@{
+    ViewBag.Title = "Создание новости";
+}
+
+@using (Html.BeginForm("Create", "News", FormMethod.Post, new { enctype = "multipart/form-data" })) 
+{
+    @Html.AntiForgeryToken()
+
+    <div class="partial-border">
+
+        @Html.LabelFor(model => model.Title, htmlAttributes: new { })
+        <div class="input-control text full-size ">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { } })
+        </div>
+
+        @Html.LabelFor(model => model.Content, htmlAttributes: new { })
+        <div class="input-control textarea full-size" data-role="input" data-text-auto-resize="true">
+            @Html.TextAreaFor(model => model.Content, new {style = "resize:vertical;"})
+        </div>
+
+        <div class="input-control file" data-role="input" style="width: 200px">
+            <input type="file" name="Image" accept="image/jpeg" id="Image">
+            <button class="button"><span class="mif-folder"></span></button>
+        </div>
+
+        <div class="align-center">
+            <input type="submit" value="Публикация" class="button success block-shadow-success" />
+        </div>
+    </div>
+}
+

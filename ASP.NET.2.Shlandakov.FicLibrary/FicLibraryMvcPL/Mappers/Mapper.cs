@@ -95,6 +95,20 @@ namespace FicLibraryMvcPL.Mappers
             };
         }
 
+        public static NewsViewModel ToView(NewsEntity news)
+        {
+            if (news == null) throw new ArgumentNullException(nameof(news));
+            return new NewsViewModel()
+            {
+                Id = news.Id,
+                Content = news.Content,
+                Image = news.Image,
+                CreatorId = news.CreatorId,
+                PublicationDate = news.PublicationDate,
+                Title = news.Title
+            };
+        }
+
         public static PagedDataViewModel<T> ToPagedView<T>(this
             IEnumerable<T> elements, int elemsPerPage, int pageNumber) where T: class 
         {
@@ -212,6 +226,20 @@ namespace FicLibraryMvcPL.Mappers
                 MinRating = search.MinRating,
                 MaxRating = search.MaxRating,
                 IncludeUnrated = search.IncludeUnrated
+            };
+        }
+
+        public static NewsEntity ToBll(NewsViewModel news)
+        {
+            if (news == null) throw new ArgumentNullException(nameof(news));
+            return new NewsEntity()
+            {
+                Id = news.Id,
+                Content = news.Content,
+                Image = news.Image,
+                CreatorId = news.CreatorId,
+                PublicationDate = news.PublicationDate,
+                Title = news.Title
             };
         }
 

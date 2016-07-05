@@ -45,5 +45,7 @@ namespace ORM
         public virtual Role Role { get; set; }
         
         public virtual ICollection<TextDescription> TextDescription { get; set; }
+
+        public virtual ICollection<News> News { get; set; }
     }
 }

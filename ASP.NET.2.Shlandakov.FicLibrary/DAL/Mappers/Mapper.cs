@@ -123,6 +123,20 @@ namespace DAL.Mappers
             };
         }
 
+        public static DalNews ToDal(News news)
+        {
+            if (news == null) throw new ArgumentNullException(nameof(news));
+            return new DalNews
+            {
+                Id = news.Id,
+                Title = news.Title,
+                PublicationDate = news.PublicationDate,
+                CreatorId = news.CreatorId,
+                Content = news.Content,
+                Image = news.Image
+            };
+        }
+
         #endregion
 
         #region ToOrm methods
@@ -237,6 +251,20 @@ namespace DAL.Mappers
                 TextDescId = rating.TextDescId,
                 UserId = rating.UserId,
                 value = rating.Value
+            };
+        }
+
+        public static News ToOrm(DalNews news)
+        {
+            if (news == null) throw new ArgumentNullException(nameof(news));
+            return new News
+            {
+                Id = news.Id,
+                CreatorId = news.CreatorId,
+                Title = news.Title,
+                PublicationDate = news.PublicationDate,
+                Image = news.Image,
+                Content = news.Content
             };
         }
 

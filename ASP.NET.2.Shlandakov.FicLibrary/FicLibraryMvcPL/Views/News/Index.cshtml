@@ -1,0 +1,81 @@
+﻿@model FicLibraryMvcPL.Models.NewsPageViewModel
+@{
+    ViewBag.Title = Model.News.Title;
+    var commentOptions = new AjaxOptions()
+    {
+        HttpMethod = "GET",
+        OnSuccess = "HideCreateButton",
+        UpdateTargetId = "add-comment",
+        LoadingElementId = "commentpreloader"
+    };
+}
+
+
+<div class="partial-border">
+    <img src="@String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(Model.News.Image))" alt="pic1" id="newsImage">
+    <h2><span class="slide-text" id="newsName">@Model.News.Title</span></h2>
+    <pre class="full-size align-justify margin10" style="font-family: 'Source Sans Pro'; white-space: pre-wrap;">
+    @Model.News.Content
+    </pre>
+    <div class="grid">
+        <div class="row">
+            <h5 style="margin: 0">Автор:</h5>
+        </div>
+        <div class="row cells2">
+            <div class="cell ">
+                <a style="color: black" href="@Url.Action("Index", "User", new {id = Model.Author.ProfileId})"><h5>@Model.Author.Login</h5></a>
+            </div>
+            <div class="cell ">
+                <h5 class="text-secondary">Опубликовано: @Model.News.PublicationDate</h5>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@if (Model.Comments != null)
+{
+    <h3 align="center">Коментарии</h3>
+    if (Model.Comments.ToList().Count == 0)
+    {
+        <div class="partial-border align-center">
+            <h1>
+                <small>Комментариев нет</small>
+            </h1>
+            @if (User.Identity.IsAuthenticated && !User.IsInRole("Banned"))
+            {
+                @Ajax.ActionLink("Оставьте свое мнение!", "Create", "Comment", new { relation = "News", objectId = Model.News.Id, userId = Profile["Id"] }, commentOptions, new { @class = "button success block-shadow-success", id = "show-comment-form" })
+                <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+            }
+        </div>
+    }
+    else
+    {
+        foreach (var e in Model.Comments)
+        {
+            @Html.Partial("_CommentPartial", e)
+        }
+        if (User.Identity.IsAuthenticated && !User.IsInRole("Banned"))
+        {
+            <div class="align-center">
+                @Ajax.ActionLink("Оставьте свое мнение!", "Create", "Comment", new { relation = "News", objectId = Model.News.Id, userId = Profile["Id"] }, commentOptions, new { @class = "button success block-shadow-success", id = "show-comment-form" })
+                <div class="align-center" id="preloader" data-role="preloader" data-type="metro" data-style="color" style="display: none"></div>
+            </div>
+        }
+    }
+}
+
+<style>
+    h2 span.slide-text {
+        position: inherit;
+        top: 400px;
+        left: 0;
+        width: 100%;
+        color: white;
+        font: bold 24px/45px Helvetica, Sans-Serif;
+        letter-spacing: -1px;
+        background: rgb(0, 0, 0);
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+    }
+</style>

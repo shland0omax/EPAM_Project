@@ -35,6 +35,7 @@ namespace FicLibraryMvcPL.Infrastructure
             kernel.Bind<IUserService>().To<UserService>();
             kernel.Bind<ICommentRelationService>().To<CommentRelationService>();
             kernel.Bind<IRatingService>().To<RatingService>();
+            kernel.Bind<INewsService>().To<NewsService>();
         }
     }
 }

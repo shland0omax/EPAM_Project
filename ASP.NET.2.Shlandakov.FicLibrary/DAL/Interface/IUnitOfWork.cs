@@ -12,6 +12,7 @@ namespace DAL.Interface
         IRepository<DalUser> Users { get; }
         IRepository<DalRole> Roles { get; }
         IRepository<DalRating> Ratings { get; }
+        IRepository<DalNews> News { get; }
 
 
         void Commit();

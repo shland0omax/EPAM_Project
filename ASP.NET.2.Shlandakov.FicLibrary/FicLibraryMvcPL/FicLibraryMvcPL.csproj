@@ -209,6 +209,7 @@
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Controllers\TextController.cs" />
     <Compile Include="Controllers\TextDescriptionController.cs" />
@@ -216,12 +217,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\CarouselHelper.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Infrastructure\PagingHelper.cs" />
     <Compile Include="Infrastructure\RoleEnumHelper.cs" />
     <Compile Include="Mappers\Mapper.cs" />
     <Compile Include="Models\AuthModels\LogOnViewModel.cs" />
     <Compile Include="Models\AuthModels\RegisterViewModel.cs" />
+    <Compile Include="Models\BllModels\NewsViewModel.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\IdentityModels\UserStatsViewModel.cs" />
     <Compile Include="Models\IdentityModels\ProfileViewModel.cs" />
@@ -231,6 +234,8 @@
     <Compile Include="Models\IdentityModels\UserViewModel.cs" />
     <Compile Include="Models\CommentViewModel.cs" />
     <Compile Include="Models\IdentityModels\UserPageViewModel.cs" />
+    <Compile Include="Models\NewsPageViewModel.cs" />
+    <Compile Include="Models\NewsPostModel.cs" />
     <Compile Include="Models\PageInfo.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\PagedDataViewModel.cs" />
@@ -273,6 +278,9 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\User\_List.cshtml" />
     <Content Include="Views\TextDescription\Edit.cshtml" />
+    <Content Include="Views\News\MainSlider.cshtml" />
+    <Content Include="Views\News\Create.cshtml" />
+    <Content Include="Views\News\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

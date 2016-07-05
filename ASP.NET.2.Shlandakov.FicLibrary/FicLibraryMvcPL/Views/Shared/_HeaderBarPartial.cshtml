@@ -37,6 +37,11 @@
                     <li><a href="@Url.Action("Create", "TextDescription")" class="bg-hover-crimson" style="color: white"><span class="mif-pencil icon" style="color: white"></span>Создать публикацию</a></li>
                     <li class="divider"></li>
                 }
+                @if (User.IsInRole("Admin") || User.IsInRole("Owner"))
+                {
+                    <li><a href="@Url.Action("Create", "News")" class="bg-hover-crimson" style="color: white"><span class="mif-pencil icon" style="color: white"></span>Добавить новость</a></li>
+                    <li class="divider"></li>
+                }
                 <li><a href="@Url.Action("Logoff", "Account")" class="bg-hover-crimson" style="color: white"><span class="mif-exit icon" style="color: white"></span>Выйти</a></li>
             </ul>
         </li>

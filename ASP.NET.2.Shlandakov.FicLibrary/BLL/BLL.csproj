@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Entities\CommentEntity.cs" />
     <Compile Include="Entities\CommentRelationEntity.cs" />
+    <Compile Include="Entities\NewsEntity.cs" />
     <Compile Include="Entities\ProfileEntity.cs" />
     <Compile Include="Entities\RatingEntity.cs" />
     <Compile Include="Entities\RoleEntity.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Infrastructure\ServiceModule.cs" />
     <Compile Include="Interfaces\IBllEntity.cs" />
     <Compile Include="Interfaces\ICommentRelationService.cs" />
+    <Compile Include="Interfaces\INewsService.cs" />
     <Compile Include="Interfaces\IRatingService.cs" />
     <Compile Include="Mappers\Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,6 +78,7 @@
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Services\CommentRelationService.cs" />
     <Compile Include="Services\CommentService.cs" />
+    <Compile Include="Services\NewsService.cs" />
     <Compile Include="Services\ProfileService.cs" />
     <Compile Include="Services\RatingService.cs" />
     <Compile Include="Services\RoleService.cs" />

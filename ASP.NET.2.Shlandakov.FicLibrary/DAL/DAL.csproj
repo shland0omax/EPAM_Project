@@ -58,6 +58,7 @@
     <Compile Include="DTO\IDalEntity.cs" />
     <Compile Include="DTO\Models\DalComment.cs" />
     <Compile Include="DTO\Models\DalCommentRelation.cs" />
+    <Compile Include="DTO\Models\DalNews.cs" />
     <Compile Include="DTO\Models\DalProfile.cs" />
     <Compile Include="DTO\Models\DalRating.cs" />
     <Compile Include="DTO\Models\DalRole.cs" />

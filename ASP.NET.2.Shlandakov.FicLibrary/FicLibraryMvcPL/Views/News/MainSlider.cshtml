@@ -1,0 +1,56 @@
+﻿@model FicLibraryMvcPL.Models.BllModels.NewsViewModel
+
+
+@if (Model != null)
+{
+    <div class="carousel" data-role="carousel" data-height="500" data-markers="false" data-period="10000" data-effect="fade" data-controls="false" style="width: 100%; height: 500px;">
+        <img src="@String.Format("data:image/jpeg;base64,{0}", Convert.ToBase64String(Model.Image))" alt="pic1" id="newsImage">
+        <a id="newsLink" href="@Url.Action("Index", new {id = @Model.Id})">
+            <h2><span class="slide-text" id="newsName">@Model.Title</span></h2></a>
+        <span class="carousel-switch-next" onclick="switch_slide(true)">
+        <span class="mif-chevron-right"></span>
+    </span>
+        <span class="carousel-switch-prev" onclick="switch_slide(false)">
+        <span class="mif-chevron-left"></span>
+    </span>
+        <input type="hidden" id="newsId" newsId="@Model.Id">
+    </div>
+
+    <style>
+        h2 span.slide-text {
+            position: absolute;
+            top: 400px;
+            left: 0;
+            width: 100%;
+            color: white;
+            font: bold 24px/45px Helvetica, Sans-Serif;
+            letter-spacing: -1px;
+            background: rgb(0, 0, 0);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+        }
+    </style>
+
+    <script>
+        function switch_slide(slideNext) {
+            $.ajax({
+                url: "@(Url.Action("GetNewsSlide", "News"))",
+                data: {
+                    'next': slideNext,
+                    'current': $('#newsId').attr('newsId')
+                },
+                type: 'POST',
+                success: function(response) {
+                    if (response.Success) {
+                        $('#newsImage').attr('src', response.Image);
+                        $('#newsLink').attr('href', response.Link);
+                        $('#newsName').text(response.Title);
+                        $('#newsId').attr('newsId', response.Id);
+                    } else {
+                        $('#error').innerHTML = response;
+                    }
+                }
+            });
+        }
+    </script>
+}
